@@ -182,7 +182,15 @@ fun cos(x: Double, eps: Double): Double = TODO()
  * Поменять порядок цифр заданного числа n на обратный: 13478 -> 87431.
  * Не использовать строки при решении задачи.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var x = n
+    var revertX = 0
+        do {
+            revertX = (revertX * 10) + x % 10
+            x /= 10
+        }while (x != 0)
+return revertX
+}
 
 /**
  * Средняя
@@ -191,7 +199,9 @@ fun revert(n: Int): Int = TODO()
  * первая цифра равна последней, вторая -- предпоследней и так далее.
  * 15751 -- палиндром, 3653 -- нет.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean {
+    if (revert(n) == n) return true
+else return false}
 
 /**
  * Средняя
