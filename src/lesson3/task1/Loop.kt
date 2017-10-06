@@ -1,6 +1,8 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson3.task1
 
+import lesson4.task1.convertToString
+
 /**
  * Пример
  *
@@ -60,11 +62,17 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Найти количество цифр в заданном числе n.
  * Например, число 1 содержит 1 цифру, 456 -- 3 цифры, 65536 -- 5 цифр.
  */
-fun digitNumber(n: Int): Int
-{
-    var count = 0
-        if (n > 0) {n % 10 ; count++}
-    return count
+fun digitNumber(n: Int): Int{
+
+    var i = 1
+    var nextN = n
+
+    do {
+        nextN /= 10
+        if (nextN != 0) i++
+    } while (nextN != 0)
+
+    return i
 }
 
 /**
@@ -73,8 +81,17 @@ fun digitNumber(n: Int): Int
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
-
+fun fib(n: Int): Int {
+    var num = 1
+    var lastNum = 1
+    var k = 1
+    for (i in 3..n) {
+        lastNum = num
+        num = k
+        k = num + lastNum
+    }
+    return k
+}
 /**
  * Простая
  *
@@ -218,7 +235,20 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  * 149162536496481100121144...
  * Например, 2-я цифра равна 4, 7-я 5, 12-я 6.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var s: String
+    var square: Int
+    s = ""
+    for (i in 1..10) {
+        square = i * i
+        s += square.toString()
+        println(s)
+            }
+    println ("stroka =" + s)
+    println ("n  =" + n)
+    println ("n element =" + s.get(n-1))
+    return s.get(n-1).toInt()
+    }
 
 /**
  * Сложная
@@ -227,4 +257,24 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  * 1123581321345589144...
  * Например, 2-я цифра равна 1, 9-я 2, 14-я 5.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+
+
+    var i = 0
+    var num = 0
+    var answer: Int
+
+    while (num < n) {
+
+        i++
+        num += digitNumber(fib(i))
+
+    }
+
+    answer = fib(i)
+
+    (n until num).forEach { answer /= 10 }
+
+    return (answer % 10)
+
+}
