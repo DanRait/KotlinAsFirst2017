@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson3.task1
 
 import lesson4.task1.convertToString
@@ -36,7 +37,7 @@ fun isPrime(n: Int): Boolean {
  */
 fun isPerfect(n: Int): Boolean {
     var sum = 1
-    for (m in 2..n/2) {
+    for (m in 2..n / 2) {
         if (n % m > 0) continue
         sum += m
         if (sum > n) break
@@ -62,7 +63,7 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Найти количество цифр в заданном числе n.
  * Например, число 1 содержит 1 цифру, 456 -- 3 цифры, 65536 -- 5 цифр.
  */
-fun digitNumber(n: Int): Int{
+fun digitNumber(n: Int): Int {
 
     var i = 1
     var nextN = n
@@ -92,6 +93,7 @@ fun fib(n: Int): Int {
     }
     return k
 }
+
 /**
  * Простая
  *
@@ -105,24 +107,23 @@ fun lcm(m: Int, n: Int): Int {
     var b = n
     if (m == n) {
         nok = c / m
-        println("nok = " + nok )
+        println("nok = " + nok)
         return nok
     } else {
         while (d != b) {
-               if (d > b) {
-                    d = d - b
-                    //println("d = " + d)
-               } else {
-                    b = b - d
-                    //println("b = " + b)
-                       }
-                   }
+            if (d > b) {
+                d = d - b
+                //println("d = " + d)
+            } else {
+                b = b - d
+                //println("b = " + b)
+            }
+        }
         c = c / d
-        println ("nok = " + c)
+        println("nok = " + c)
         return c
     }
 }
-
 
 
 /**
@@ -133,10 +134,10 @@ fun lcm(m: Int, n: Int): Int {
 fun minDivisor(n: Int): Int {
     var a = 1
     var b = 2
-    for (a in 1..n)
-    {
+    for (a in 1..n) {
         if (n % b == 0) return b
-        else {b = b + 1; }
+        else {
+            b = b + 1; }
     }
     return b
 }
@@ -149,10 +150,10 @@ fun minDivisor(n: Int): Int {
 fun maxDivisor(n: Int): Int {
     var a = 1
     var b = 1
-    for (a in n - a downTo 1)
-    {
+    for (a in n - a downTo 1) {
         if (n % a == 0) return a
-        else {b = b + 1; }
+        else {
+            b = b + 1; }
     }
     return b
 }
@@ -202,11 +203,11 @@ fun cos(x: Double, eps: Double): Double = TODO()
 fun revert(n: Int): Int {
     var x = n
     var revertX = 0
-        do {
-            revertX = (revertX * 10) + x % 10
-            x /= 10
-        }while (x != 0)
-return revertX
+    do {
+        revertX = (revertX * 10) + x % 10
+        x /= 10
+    } while (x != 0)
+    return revertX
 }
 
 /**
@@ -218,7 +219,8 @@ return revertX
  */
 fun isPalindrome(n: Int): Boolean {
     if (revert(n) == n) return true
-else return false}
+    else return false
+}
 
 /**
  * Средняя
@@ -243,12 +245,12 @@ fun squareSequenceDigit(n: Int): Int {
         square = i * i
         s += square.toString()
         println(s)
-            }
-    println ("stroka =" + s)
-    println ("n  =" + n)
-    println ("n element =" + s.get(n-1))
-    return s.get(n-1).toInt()
     }
+    println("stroka =" + s)
+    println("n  =" + n)
+    println("n element =" + s.get(n - 1))
+    return s.get(n - 1).toInt()
+}
 
 /**
  * Сложная

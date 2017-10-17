@@ -65,7 +65,7 @@ fun seconds(hours: Int, minutes: Int, seconds: Int): Int {
  * 1 сажень = 3 аршина = 48 вершков, 1 вершок = 4.445 см.
  */
 fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double =
-    (sagenes * 48 * 4.445 + arshins * 16 * 4.445 + vershoks * 4.445) / 100
+        ((sagenes * 3 + arshins) * 16 + vershoks) * 4.445 / 100
 
 
 /**
@@ -74,7 +74,8 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double =
  * Пользователь задает угол в градусах, минутах и секундах (например, 36 градусов 14 минут 35 секунд).
  * Вывести значение того же угла в радианах (например, 0.63256).
  */
-fun angleInRadian(grad: Int, min: Int, sec: Int): Double = grad * (PI / 180) + min * (PI / (180 * 60)) + sec * (PI / (180 * 3600))
+fun angleInRadian(grad: Int, min: Int, sec: Int): Double =
+        grad * PI / 180 + min * PI / (180 * 60) + sec * PI / (180 * 3600)
 
 /**
  * Тривиальная
@@ -91,7 +92,7 @@ fun trackLength(x1: Double, y1: Double, x2: Double, y2: Double): Double =
  * Пользователь задает целое число, большее 100 (например, 3801).
  * Определить третью цифру справа в этом числе (в данном случае 8).
  */
-fun thirdDigit(number: Int): Int = (number / 100) % 10
+fun thirdDigit(number: Int): Int = number / 100 % 10
 
 /**
  * Простая
