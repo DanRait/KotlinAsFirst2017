@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson2.task1
 
 import lesson1.task1.discriminant
@@ -81,13 +82,11 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
 fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           rookX: Int, rookY: Int,
                           bishopX: Int, bishopY: Int): Int {
-
-    val lad = ((kingX == rookX) || (kingY == rookY))
-    val lad1 = Math.abs(kingX - bishopX) == Math.abs(kingY - bishopY)
-
-    if (lad && lad1) return 3
-    if (lad) return 1
-    if (lad1) return 2
+    val danger = ((kingX == rookX) || (kingY == rookY))
+    val danger1 = Math.abs(kingX - bishopX) == Math.abs(kingY - bishopY)
+    if (danger && danger1) return 3
+    else if (danger) return 1
+    else if (danger1) return 2
     else return 0
 }
 
