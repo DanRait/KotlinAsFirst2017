@@ -101,27 +101,27 @@ fun fib(n: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var c = m * n
-    var nok = 0
-    var d = m
-    var b = n
+    var multiplication = m * n
+    var leastCommonMultiple = 0
+    var firstNumber = m
+    var secondNumber = n
     if (m == n) {
-        nok = c / m
-        println("nok = " + nok)
-        return nok
+        leastCommonMultiple = multiplication / m
+        println("leastCommonMultiple = " + leastCommonMultiple)
+        return leastCommonMultiple
     } else {
-        while (d != b) {
-            if (d > b) {
-                d = d - b
-                //println("d = " + d)
+        while (firstNumber != secondNumber) {
+            if (firstNumber > secondNumber) {
+                firstNumber = firstNumber - secondNumber
+                //println("firstNumber = " + firstNumber)
             } else {
-                b = b - d
-                //println("b = " + b)
+                secondNumber = secondNumber - firstNumber
+                //println("secondNumber = " + secondNumber)
             }
         }
-        c = c / d
-        println("nok = " + c)
-        return c
+        multiplication = multiplication / firstNumber
+        println("leastCommonMultiple = " + multiplication)
+        return multiplication
     }
 }
 
@@ -235,25 +235,10 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  * 149162536496481100121144...
  * Например, 2-я цифра равна 4, 7-я 5, 12-я 6.
  */
-fun squareSequenceDigit2(n: Int): Int {
-    var s: String
-    var square: Int
-    s = ""
-    for (i in 1..10) {
-        square = i * i
-        s += square.toString()
-        println(s)
-    }
-    println("stroka =" + s)
-    println("n  =" + n)
-    println("n element =" + s.get(n - 1))
-    return s.get(n - 1).toInt()
-}
-
 fun squareSequenceDigit(n: Int): Int {
     val ss: StringBuilder = StringBuilder("" )
     for (i in 1..n) ss.append(i * i)
-    return ss.get(n-1).toInt()
+    return ss.get(n-1).toString().toInt()
 }
 
 /**
