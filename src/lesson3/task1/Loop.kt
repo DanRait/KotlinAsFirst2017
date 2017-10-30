@@ -135,9 +135,9 @@ fun minDivisor(n: Int): Int {
     var a = 1
     var b = 2
     for (a in 1..n) {
-        if (n % b == 0) return b
+        if (n % b == 0)
         else {
-            b = b + 1; }
+            b += 1; }
     }
     return b
 }
@@ -218,10 +218,8 @@ fun revert(n: Int): Int {
  * 15751 -- палиндром, 3653 -- нет.
  */
 fun isPalindrome(n: Int): Boolean {
-    if (revert(n) == n) return true
-    else return false
+    return revert(n) == n
 }
-
 /**
  * Средняя
  *
@@ -237,7 +235,7 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  * 149162536496481100121144...
  * Например, 2-я цифра равна 4, 7-я 5, 12-я 6.
  */
-fun squareSequenceDigit(n: Int): Int {
+fun squareSequenceDigit2(n: Int): Int {
     var s: String
     var square: Int
     s = ""
@@ -250,6 +248,12 @@ fun squareSequenceDigit(n: Int): Int {
     println("n  =" + n)
     println("n element =" + s.get(n - 1))
     return s.get(n - 1).toInt()
+}
+
+fun squareSequenceDigit(n: Int): Int {
+    val ss: StringBuilder = StringBuilder("" )
+    for (i in 1..n) ss.append(i * i)
+    return ss.get(n-1).toInt()
 }
 
 /**
