@@ -113,7 +113,9 @@ fun abs(v: List<Double>): Double = TODO()
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double = TODO()
+fun mean(list: List<Double>): Double =
+        if (list.isNotEmpty()) list.sum()/list.size
+        else 0.0
 
 /**
  * Средняя
@@ -123,7 +125,13 @@ fun mean(list: List<Double>): Double = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> = TODO()
+fun center(list: MutableList<Double>): MutableList<Double> {
+    val centeredList = mean(list)
+    for (i in 0..list.size - 1) {
+        list[i] -= centeredList
+    }
+    return list
+}
 
 /**
  * Средняя
@@ -132,7 +140,14 @@ fun center(list: MutableList<Double>): MutableList<Double> = TODO()
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.0.
  */
-fun times(a: List<Double>, b: List<Double>): Double = TODO()
+fun times(a: List<Double>, b: List<Double>): Double {
+    var c = 0.0
+    for (i in 0 until b.size) {
+        c += a[i] * b[i]
+    }
+    return c
+}
+
 
 /**
  * Средняя
@@ -163,7 +178,19 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> = TODO()
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> = TODO()
+fun factorize(n: Int): List<Int> {
+    val list = mutableListOf<Int>()
+    var naturalNumber = n
+    var multiplier = 2
+    while (multiplier <= naturalNumber) {
+        if (naturalNumber % multiplier == 0) {
+            naturalNumber /= multiplier
+            list += multiplier
+        } else
+            multiplier += 1
+    }
+    return list.sorted()
+}
 
 /**
  * Сложная
@@ -171,7 +198,7 @@ fun factorize(n: Int): List<Int> = TODO()
  * Разложить заданное натуральное число n > 1 на простые множители.
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  */
-fun factorizeToString(n: Int): String = TODO()
+fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*")
 
 /**
  * Средняя
