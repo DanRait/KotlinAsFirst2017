@@ -84,7 +84,7 @@ fun angleInRadian(grad: Int, min: Int, sec: Int): Double =
  * Например, расстояние между (3, 0) и (0, 4) равно 5
  */
 fun trackLength(x1: Double, y1: Double, x2: Double, y2: Double): Double =
-        Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
+        sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
 
 /**
  * Простая
@@ -112,8 +112,8 @@ fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minute
  * Например, 100 рублей под 10% годовых превратятся в 133.1 рубля
  */
 fun accountInThreeYears(initial: Int, percent: Int): Double {
-       val x = percent.toDouble() / 100
-     return initial * Math.pow(1 + x, 3.0)
+    val x = percent.toDouble() / 100
+    return initial * pow(1 + x, 3.0)
 }
 
 

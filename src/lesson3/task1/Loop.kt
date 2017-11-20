@@ -105,24 +105,17 @@ fun lcm(m: Int, n: Int): Int {
     var leastCommonMultiple = 0
     var firstNumber = m
     var secondNumber = n
-    if (m == n) {
-        leastCommonMultiple = multiplication / m
-        println("leastCommonMultiple = " + leastCommonMultiple)
-        return leastCommonMultiple
-    } else {
-        while (firstNumber != secondNumber) {
-            if (firstNumber > secondNumber) {
-                firstNumber = firstNumber - secondNumber
-                //println("firstNumber = " + firstNumber)
-            } else {
-                secondNumber = secondNumber - firstNumber
-                //println("secondNumber = " + secondNumber)
-            }
+    leastCommonMultiple = multiplication / m
+      while (firstNumber != secondNumber) {
+        if (firstNumber > secondNumber) {
+            firstNumber = firstNumber - secondNumber
+        } else {
+            secondNumber = secondNumber - firstNumber
         }
-        multiplication = multiplication / firstNumber
-        println("leastCommonMultiple = " + multiplication)
-        return multiplication
     }
+    multiplication = multiplication / firstNumber
+    return multiplication
+
 }
 
 
@@ -132,14 +125,12 @@ fun lcm(m: Int, n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    var a = 1
-    var b = 2
-    for (a in 1..n) {
-        if (n % b == 0)
-        else {
-            b += 1; }
+    var divisor = 2
+    for (i in 1..n ){
+        if (n % divisor != 0) divisor += 1
+        else break
     }
-    return b
+    return divisor
 }
 
 /**
@@ -148,14 +139,13 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var a = 1
-    var b = 1
-    for (a in n - a downTo 1) {
-        if (n % a == 0) return a
+    var divisor = n - 1
+    for (i in n - 1 downTo 1) {
+        if (n % divisor == 0) break
         else {
-            b = b + 1; }
+            divisor -= 1; }
     }
-    return b
+    return divisor
 }
 
 /**

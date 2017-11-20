@@ -3,6 +3,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import java.lang.Math.abs
 
 /**
  * Пример
@@ -83,7 +84,7 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           rookX: Int, rookY: Int,
                           bishopX: Int, bishopY: Int): Int {
     val rook = ((kingX == rookX) || (kingY == rookY))
-    val bishop = Math.abs(kingX - bishopX) == Math.abs(kingY - bishopY)
+    val bishop = abs(kingX - bishopX) == abs(kingY - bishopY)
     return when {
         (rook && bishop) -> 3
         rook -> 1
