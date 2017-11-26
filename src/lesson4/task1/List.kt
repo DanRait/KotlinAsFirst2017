@@ -2,6 +2,8 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson3.task1.isPrime
+import java.lang.Math.pow
 
 /**
  * Пример
@@ -182,9 +184,14 @@ fun factorize(n: Int): List<Int> {
     val list = mutableListOf<Int>()
     var naturalNumber = n
     var multiplier = 2
-    while (multiplier <= naturalNumber) {
+    while (multiplier <= naturalNumber)
+    {
         if (naturalNumber % multiplier == 0) {
             naturalNumber /= multiplier
+            if (multiplier < 2) break
+            for (m in 2..Math.sqrt(multiplier.toDouble()).toInt()) {
+                if (multiplier % m == 0) break
+            }
             list += multiplier
         } else
             multiplier += 1
@@ -207,7 +214,15 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> = TODO()
+fun convert(n: Int, base: Int): List<Int> {
+    var number = n
+    var list = listOf<Int>()
+    while (number > 0) {
+        list += number % base
+        number /= base
+    }
+    return list.reversed()
+}
 
 /**
  * Сложная
@@ -217,7 +232,20 @@ fun convert(n: Int, base: Int): List<Int> = TODO()
  * строчными буквами: 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
-fun convertToString(n: Int, base: Int): String = TODO()
+fun convertToString(n: Int, base: Int): String {
+    val letters = listOf("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o",
+            "p","q","r","s","t","u","v","w","x","y","z")
+    val listFirst = mutableListOf<Int>()
+    for (i in 0 until convert(n, base).size) {
+        listFirst.add(convert(n, base)[i])
+    }
+    val listSecond = mutableListOf<String>()
+    for (i in 0 until listFirst.size) {
+        if (listFirst[i] > 9) {
+            listSecond.add(letters[listFirst[i] - 10])
+        } else listSecond.add(listFirst[i].toString())
+    }
+    return listSecond.joinToString(separator = "")}
 
 /**
  * Средняя
@@ -226,7 +254,14 @@ fun convertToString(n: Int, base: Int): String = TODO()
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    var result = 0
+    val size = digits.size
+    for ((index, element) in digits.withIndex()) {
+        result += (element * pow(base.toDouble(), (size - index - 1).toDouble())).toInt()
+    }
+    return result
+}
 
 /**
  * Сложная

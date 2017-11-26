@@ -3,6 +3,14 @@
 package lesson3.task1
 
 import lesson4.task1.convertToString
+import java.lang.Math.pow
+fun sequenceDigit (n: Int, m: Int): Int {
+    var numberN = n
+    for (i in 1..m){
+        numberN = numberN / 10
+    }
+    return numberN % 10
+}
 
 /**
  * Пример
@@ -216,7 +224,7 @@ fun isPalindrome(n: Int): Boolean {
  * Для заданного числа n определить, содержит ли оно различающиеся цифры.
  * Например, 54 и 323 состоят из разных цифр, а 111 и 0 из одинаковых.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean = digitCountInNumber(n, (n % 10)) != digitNumber(n)
 
 /**
  * Сложная
@@ -224,12 +232,27 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  * Найти n-ю цифру последовательности из квадратов целых чисел:
  * 149162536496481100121144...
  * Например, 2-я цифра равна 4, 7-я 5, 12-я 6.
+ * for (i in 1..n)
+{length = length % 10
  */
+
+
 fun squareSequenceDigit(n: Int): Int {
-    val ss: StringBuilder = StringBuilder("" )
-    for (i in 1..n) ss.append(i * i)
-    return ss.get(n-1).toString().toInt()
+    var long = 0
+    var number = 0
+    var square = 0
+    do {
+        number++
+        println("number = : $number")
+        square = number * number
+        println("square = : $square")
+        long += digitNumber(square)
+        println("long = : $long")
+    } while (long < n)
+    return sequenceDigit(square, long - n)
 }
+
+
 
 /**
  * Сложная
