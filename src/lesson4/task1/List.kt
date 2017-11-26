@@ -282,7 +282,21 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val listOfPairs = listOf(Pair(1, "I"), Pair(4, "IV"),
+            Pair(5, "V"), Pair(9, "IX"), Pair(10, "X"), Pair(40, "XL"), Pair(50, "L"), Pair(90, "XC"),
+            Pair(100, "C"), Pair(400, "CD"), Pair(500, "D"), Pair(900, "CM") , Pair(1000, "M"))
+    var result = ""
+    var number = n
+    for (i in 0 until listOfPairs.size) {
+        while (number >= listOfPairs[i].first) {
+            number -= listOfPairs[i].first
+            result += (listOfPairs[i].second)
+
+        }
+    }
+    return result
+}
 
 /**
  * Очень сложная
