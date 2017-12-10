@@ -66,8 +66,37 @@ fun main(args: Array<String>) {
  * День и месяц всегда представлять двумя цифрами, например: 03.04.2011.
  * При неверном формате входной строки вернуть пустую строку
  */
-fun dateStrToDigit(str: String): String = TODO()
 
+fun dateStrToDigit(str: String): String {
+    val parts = str.split(" ")
+    var result = ""
+    var res = ""
+    var day = ""
+    var month = ""
+    var year = ""
+    var number = 0
+    try {
+        for (part in parts) {
+            number += 1
+            res = part
+            if (number == 1) day = res
+            if (number == 2) {
+                val listOfPairs = listOf(Pair("января", "01"), Pair("ноября", "11"), Pair("апреля", "04"), Pair("июля", "07"))
+                for (i in 0 until listOfPairs.size) {
+                    if (part == listOfPairs[i].first) {
+                        res = listOfPairs[i].second
+                    }
+                }
+                month = res
+            }
+            if (number == 3) year = res
+        }
+        return String.format("%02d.%02d.%02d", day.toInt(), month.toInt(), year.toInt())
+    } catch (e: NumberFormatException) {
+        return ""
+    }
+}
+ 
 /**
  * Средняя
  *
@@ -75,7 +104,46 @@ fun dateStrToDigit(str: String): String = TODO()
  * Перевести её в строковый формат вида "15 июля 2016".
  * При неверном формате входной строки вернуть пустую строку
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val parts = digital.split(  ".")
+    var result = ""
+    var res = ""
+    var day = ""
+    var month = ""
+    var year = ""
+    var number = 0
+    try {
+        for (part in parts) {
+            number += 1
+            res = part
+            if (number == 1) day = res
+            if (number == 2) {
+                val listOfPairs = listOf(Pair("января", "01"), Pair("ноября", "11"), Pair("апреля", "04"), Pair("июля", "07"))
+                for (i in 0 until listOfPairs.size) {
+                    if (part == listOfPairs[i].second) {
+                        res = listOfPairs[i].first
+                        break
+                    } else res = ""
+                }
+                month = res
+            }
+            if (number == 3) year = res
+            if (number > 3) return ""
+        }
+        println(day.toInt().toString() + month + year)
+        if ( month == "") {
+            result = ""
+        } else {
+            result = day.toInt().toString() + " " + month + " " + year
+        }
+        //return String.format("%s:%s:%s", day.toString(), month.toString(), year.toString())
+        return result.toString()
+        //println(String.format("%02d.%02d.%02d", day.toInt(), month, year.toInt()))
+        //return String.format("%02d.%02d.%02d", day.toInt(), month, year.toInt())
+    } catch (e: NumberFormatException) {
+        return ""
+    }
+}
 
 /**
  * Средняя
@@ -89,7 +157,26 @@ fun dateDigitToStr(digital: String): String = TODO()
  * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
  * При неверном формате вернуть пустую строку
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    val parts = phone.split(" ", "-", "(", ")", "_")
+    var result = ""
+    var res = ""
+    var pattern = Regex("^\\+?[0123456789]*")
+    if (Regex("[^\\s\\d\\+\\-\\(\\)]").containsMatchIn(phone)) {
+        return ""
+    }
+    try {
+        for (part in parts) {
+            res += part
+        }
+        if (res.matches(pattern)) {
+            result = res
+        } else result = ""
+        return result
+        } catch (e: NumberFormatException) {
+        return ""
+    }
+}
 
 /**
  * Средняя
@@ -101,7 +188,30 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    println(jumps)
+    var rest = 0
+    var biggest = 0
+    if (!Regex("""\d+""").containsMatchIn(jumps)) {
+        return -1
+    }
+    if (Regex("[^\\s\\d\\-%]").containsMatchIn(jumps)) {
+        return -1
+    }
+    val matchedResults = Regex(pattern = """\d+""").findAll(jumps)
+    try {
+        for (matchedText in matchedResults) {
+            rest = matchedText.value.toInt()
+            println("res = " + rest)
+            if (rest > biggest) {
+                biggest = rest
+            }
+        }
+        return biggest
+        } catch (e: NumberFormatException) {
+        return -1
+    }
+}
 
 /**
  * Сложная
@@ -113,7 +223,29 @@ fun bestLongJump(jumps: String): Int = TODO()
  * Прочитать строку и вернуть максимальную взятую высоту (230 в примере).
  * При нарушении формата входной строки вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    var rest = 0
+    var bestResult = 0
+    if (!Regex("""\d+""").containsMatchIn(jumps)) {
+        return -1
+    }
+    if (Regex("[^\\s\\d+\\-%\\+]").containsMatchIn(jumps)) {
+        return -1
+    }
+    // jump = 220 + 224 %+ 228 %- 230 + 232 %%- 234 %
+    val res1 = Regex("\\%+?\\+").replace(jumps, "\\+") // %+ -> +   | 220 + 224 + 228 %- 230 + 232 %%- 234 %
+    val res2 = Regex("\\%+?\\-*?").replace(res1, "-")  // %%- -> -  | 220 + 224 + 228 -- 230 + 232 --- 234 -
+    val res3 = Regex("\\d{3}\\s{1}\\-+").replace(res2, "") // "123 ---" -> ""   | 220 + 224 +  230 +
+    val matchedResults = Regex(pattern = "\\d{3}").findAll(res3)
+            for (matchedText in matchedResults) {
+            rest = matchedText.value.toInt()
+            if (rest > bestResult) {
+                bestResult = rest
+            }
+        }
+        return bestResult
+    }
+
 
 /**
  * Сложная
@@ -124,7 +256,41 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    var common_sum = 0
+    var negativnie_sum = 0
+    var positivnie_sum = 0
+    if (Regex("\\d+\\s\\d+").containsMatchIn(expression)) { // двух чисел подряд "1 2" не допускается
+        return -1
+    }
+    if (Regex("[\\+\\-]\\s[\\+\\-]").containsMatchIn(expression)) { //Наличие двух знаков подряд "13 + + 10" не допускается
+        return -1
+    }
+    if (Regex("[^\\+\\-\\d\\s]").containsMatchIn(expression)) throw IllegalArgumentException( "нарушение формата входной строки")
+    // expression = 2 + 31 - 40 + 13
+    val res1 = Regex("\\-\\s\\d+\\s*").replace(expression, "") // positivnie 2 + 31 + 13
+    println("res1 = " + res1)
+    val res2 = Regex("\\+\\s\\d+").replace(expression, "")  // negativnie 2 - 40
+    val res3 = Regex("^\\d+\\s").replace(res2, "")  // negativnie - 40
+    println("res3 = " + res3)
+
+    val matchedResults = Regex(pattern = "\\d+").findAll(res1) // 2 31 13
+    val matchedResults2 = Regex(pattern = "\\d+").findAll(res3) // 40
+
+    for (matchedText in matchedResults) {
+        println("res = " + matchedText.value.toInt())
+        positivnie_sum += matchedText.value.toInt() // 2 + 31 + 13 = 46
+        println("positivnie_sum = " + positivnie_sum)
+        }
+    for (matchedText2 in matchedResults2) {
+        println("res = " + matchedText2.value.toInt())
+        negativnie_sum += matchedText2.value.toInt() // 40
+        println("negativnie_sum = " + negativnie_sum)
+        }
+    common_sum = positivnie_sum - negativnie_sum // 46 - 40 = 6
+    return common_sum
+
+}
 
 /**
  * Сложная
@@ -161,7 +327,46 @@ fun mostExpensive(description: String): String = TODO()
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    println(roman)
+    var rest = 0
+    var sum = 0
+    if (!Regex("""\w+""").containsMatchIn(roman)) {
+        return -1
+    }
+    if (!Regex("[IXMLCV]").containsMatchIn(roman)) {
+        return -1
+    }
+    val matchedResults = Regex(pattern = """\w+""").findAll(roman)
+    val res1 = Regex("IX").replace(roman, "9 ")
+    val res2 = Regex("IV").replace(res1, "4 ")
+    val res3 = Regex("XL").replace(res2, "40 ")
+    val res4 = Regex("XC").replace(res3, "90 ")
+    val res5 = Regex("CD").replace(res4, "400 ")
+    val res6 = Regex("CM").replace(res5, "900 ")
+    val res7 = Regex("M").replace(res6, "1000 ")
+    val res8 = Regex("D").replace(res7, "500 ")
+    val res9 = Regex("C").replace(res8, "100 ")
+    val res10 = Regex("L").replace(res9, "50 ")
+    val res11 = Regex("X").replace(res10, "10 ")
+    val res12 = Regex("V").replace(res11, "5 ")
+    val res13 = Regex("I").replace(res12, "1 ")
+    println ("---" + res13)
+
+    val matchedResults2 = Regex(pattern = """\d+""").findAll(res13)
+    try {
+        for (matchedText in matchedResults2) {
+            rest = matchedText.value.toInt()
+            println("res = " + rest)
+            sum += rest
+        }
+        println ("sum = " + sum)
+        return sum
+    } catch (e: NumberFormatException) {
+        return -1
+    }
+}
+
 
 /**
  * Очень сложная
@@ -200,3 +405,4 @@ fun fromRoman(roman: String): Int = TODO()
  *
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+
