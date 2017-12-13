@@ -1,7 +1,9 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson7.task2
 
+import lesson7.task1.Cell
 import lesson7.task1.Matrix
+import lesson7.task1.MatrixImpl
 import lesson7.task1.createMatrix
 
 // Все задачи в этом файле требуют наличия реализации интерфейса "Матрица" в Matrix.kt
@@ -18,14 +20,15 @@ import lesson7.task1.createMatrix
  * 3 2 1
  */
 fun <E> transpose(matrix: Matrix<E>): Matrix<E> {
-    if (matrix.width < 1 || matrix.height < 1) return matrix
-    val result = createMatrix(height = matrix.width, width = matrix.height, e = matrix[0, 0])
+    if (matrix.width < 1 || matrix.height < 1)
+        return matrix
+    val answer = createMatrix(height = matrix.width, width = matrix.height, e = matrix[0, 0])
     for (i in 0 until matrix.width) {
         for (j in 0 until matrix.height) {
-            result[i, j] = matrix[j, i]
+            answer[i, j] = matrix[j, i]
         }
     }
-    return result
+    return answer
 }
 
 /**
@@ -36,8 +39,10 @@ fun <E> transpose(matrix: Matrix<E>): Matrix<E> {
  * При сложении попарно складываются соответствующие элементы матриц
  */
 operator fun Matrix<Int>.plus(other: Matrix<Int>): Matrix<Int> {
-    if (width != other.width || height != other.height) throw IllegalArgumentException()
-    if (width < 1 || height < 1) return this
+    if (width != other.width || height != other.height)
+        throw IllegalArgumentException()
+    if (width < 1 || height < 1)
+        return this
     val result = createMatrix(height, width, this[0, 0])
     for (i in 0 until height) {
         for (j in 0 until width) {
@@ -75,7 +80,15 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> = TODO()
  *  1  2  2  2  2  1
  *  1  1  1  1  1  1
  */
-fun generateRectangles(height: Int, width: Int): Matrix<Int> = TODO()
+fun generateRectangles(height: Int, width: Int): Matrix<Int> {
+    val matrix = createMatrix(height, width, 0)
+    for (i in 0..height - 1) {
+        for (j in 0..width - 1){
+     matrix[i, j] = Math.min(if (i >= height / 2.0) height - 1 - i else i, if (j >= width / 2) width - j - 1 else j) + 1
+        }
+    }
+    return matrix
+}
 
 /**
  * Сложная
@@ -103,7 +116,16 @@ fun generateSnake(height: Int, width: Int): Matrix<Int> = TODO()
  * 4 5 6      8 5 2
  * 7 8 9      9 6 3
  */
-fun <E> rotate(matrix: Matrix<E>): Matrix<E> = TODO()
+fun <E> rotate(matrix: Matrix<E>): Matrix<E> {
+    val answer = createMatrix(height = matrix.width, width = matrix.height, e = matrix[0, 0])
+    if (matrix.width != matrix.height) throw IllegalArgumentException()
+    for (i in 0..matrix.width - 1) {
+        for (j in 0..matrix.height - 1) {
+            answer[i, j] = matrix[matrix.width - j - 1, i]
+        }
+    }
+    return answer
+}
 
 /**
  * Сложная
@@ -205,7 +227,15 @@ fun canOpenLock(key: Matrix<Int>, lock: Matrix<Int>): Triple<Boolean, Int, Int> 
  * Инвертировать заданную матрицу.
  * При инвертировании знак каждого элемента матрицы следует заменить на обратный
  */
-operator fun Matrix<Int>.unaryMinus(): Matrix<Int> = TODO(this.toString())
+operator fun Matrix<Int>.unaryMinus(): Matrix<Int> {
+    val answer = createMatrix(height, width, this[0, 0])
+    for (row in 0..height - 1) {
+        for (column in 0..width - 1) {
+            answer[row, column] = -this[row, column]
+        }
+    }
+    return answer
+}
 
 /**
  * Средняя

@@ -79,17 +79,20 @@ fun dateStrToDigit(str: String): String {
         for (part in parts) {
             number += 1
             res = part
+            println (res)
             if (number == 1) day = res
             if (number == 2) {
-                val listOfPairs = listOf(Pair("января", "01"), Pair("ноября", "11"), Pair("апреля", "04"), Pair("июля", "07"))
+                val listOfPairs = listOf(Pair("января", "01"), Pair("февраля", "02"), Pair("марта", "03"), Pair("апреля", "04"), Pair("мая", "05"), Pair("июня", "06"), Pair("июля", "07"), Pair("августа", "08"), Pair("сентября", "09"), Pair("октября", "10"), Pair("ноября", "11"), Pair("декабря", "12"))
                 for (i in 0 until listOfPairs.size) {
                     if (part == listOfPairs[i].first) {
                         res = listOfPairs[i].second
+                        println ("res" + res)
                     }
                 }
                 month = res
             }
             if (number == 3) year = res
+            println( "---" + day.toInt() + " " + month + " " + year)
         }
         return String.format("%02d.%02d.%02d", day.toInt(), month.toInt(), year.toInt())
     } catch (e: NumberFormatException) {
@@ -118,7 +121,7 @@ fun dateDigitToStr(digital: String): String {
             res = part
             if (number == 1) day = res
             if (number == 2) {
-                val listOfPairs = listOf(Pair("января", "01"), Pair("ноября", "11"), Pair("апреля", "04"), Pair("июля", "07"))
+                val listOfPairs = listOf(Pair("января", "01"), Pair("февраля", "02"), Pair("марта", "03"), Pair("апреля", "04"), Pair("мая", "05"), Pair("июня", "06"), Pair("июля", "07"), Pair("августа", "08"), Pair("сентября", "09"), Pair("октября", "10"), Pair("ноября", "11"), Pair("декабря", "12"))
                 for (i in 0 until listOfPairs.size) {
                     if (part == listOfPairs[i].second) {
                         res = listOfPairs[i].first
@@ -235,8 +238,10 @@ fun bestHighJump(jumps: String): Int {
     // jump = 220 + 224 %+ 228 %- 230 + 232 %%- 234 %
     val res1 = Regex("\\%+?\\+").replace(jumps, "\\+") // %+ -> +   | 220 + 224 + 228 %- 230 + 232 %%- 234 %
     val res2 = Regex("\\%+?\\-*?").replace(res1, "-")  // %%- -> -  | 220 + 224 + 228 -- 230 + 232 --- 234 -
-    val res3 = Regex("\\d{3}\\s{1}\\-+").replace(res2, "") // "123 ---" -> ""   | 220 + 224 +  230 +
-    val matchedResults = Regex(pattern = "\\d{3}").findAll(res3)
+    println (res2)
+    val res3 = Regex("\\d+\\s{1}\\-+").replace(res2, "") // "123 ---" -> ""   | 220 + 224 +  230 +
+    println (res3)
+    val matchedResults = Regex(pattern = "\\d+").findAll(res3)
             for (matchedText in matchedResults) {
             rest = matchedText.value.toInt()
             if (rest > bestResult) {
@@ -260,13 +265,21 @@ fun plusMinus(expression: String): Int {
     var common_sum = 0
     var negativnie_sum = 0
     var positivnie_sum = 0
+
     if (Regex("\\d+\\s\\d+").containsMatchIn(expression)) { // двух чисел подряд "1 2" не допускается
         return -1
     }
     if (Regex("[\\+\\-]\\s[\\+\\-]").containsMatchIn(expression)) { //Наличие двух знаков подряд "13 + + 10" не допускается
         return -1
     }
-    if (Regex("[^\\+\\-\\d\\s]").containsMatchIn(expression)) throw IllegalArgumentException( "нарушение формата входной строки")
+    if (Regex("[^\\+\\-\\d\\s]").containsMatchIn(expression)) {
+        return -1
+    }
+
+    //if (Regex("^$").containsMatchIn(expression)) {
+    //    throw IllegalArgumentException("java.lang.NumberFormatException: Only signed numbers are allowed")
+    //}
+    //if (Regex("^$").containsMatchIn(expression)) throw IllegalArgumentException()
     // expression = 2 + 31 - 40 + 13
     val res1 = Regex("\\-\\s\\d+\\s*").replace(expression, "") // positivnie 2 + 31 + 13
     println("res1 = " + res1)
@@ -331,10 +344,7 @@ fun fromRoman(roman: String): Int {
     println(roman)
     var rest = 0
     var sum = 0
-    if (!Regex("""\w+""").containsMatchIn(roman)) {
-        return -1
-    }
-    if (!Regex("[IXMLCV]").containsMatchIn(roman)) {
+    if (Regex("[^IXMLCVD]").containsMatchIn(roman)) {
         return -1
     }
     val matchedResults = Regex(pattern = """\w+""").findAll(roman)
