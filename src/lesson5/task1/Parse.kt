@@ -1,6 +1,8 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson5.task1
 
+import java.lang.IllegalArgumentException
+
 /**
  * Пример
  *
@@ -94,7 +96,11 @@ fun dateStrToDigit(str: String): String {
             if (number == 3) year = res
             println( "---" + day.toInt() + " " + month + " " + year)
         }
-        return String.format("%02d.%02d.%02d", day.toInt(), month.toInt(), year.toInt())
+        if (year == "0") {
+            return String.format("%02d.%02d.%d", day.toInt(), month.toInt(), year.toInt())
+        } else {
+            return String.format("%02d.%02d.%02d", day.toInt(), month.toInt(), year.toInt())
+        }
     } catch (e: NumberFormatException) {
         return ""
     }
@@ -237,10 +243,14 @@ fun bestHighJump(jumps: String): Int {
     }
     // jump = 220 + 224 %+ 228 %- 230 + 232 %%- 234 %
     val res1 = Regex("\\%+?\\+").replace(jumps, "\\+") // %+ -> +   | 220 + 224 + 228 %- 230 + 232 %%- 234 %
+    println ("res1 = " + res1)
     val res2 = Regex("\\%+?\\-*?").replace(res1, "-")  // %%- -> -  | 220 + 224 + 228 -- 230 + 232 --- 234 -
-    println (res2)
+    println ("res2 = " + res2)
     val res3 = Regex("\\d+\\s{1}\\-+").replace(res2, "") // "123 ---" -> ""   | 220 + 224 +  230 +
-    println (res3)
+    println ("res3 = " + res3)
+    if (res3 == "") {
+        return -1
+    }
     val matchedResults = Regex(pattern = "\\d+").findAll(res3)
             for (matchedText in matchedResults) {
             rest = matchedText.value.toInt()
@@ -272,33 +282,26 @@ fun plusMinus(expression: String): Int {
     if (Regex("[\\+\\-]\\s[\\+\\-]").containsMatchIn(expression)) { //Наличие двух знаков подряд "13 + + 10" не допускается
         return -1
     }
-    if (Regex("[^\\+\\-\\d\\s]").containsMatchIn(expression)) {
-        return -1
-    }
-
-    //if (Regex("^$").containsMatchIn(expression)) {
-    //    throw IllegalArgumentException("java.lang.NumberFormatException: Only signed numbers are allowed")
-    //}
-    //if (Regex("^$").containsMatchIn(expression)) throw IllegalArgumentException()
+    if (Regex("[^\\+\\-\\d\\s]").containsMatchIn(expression)) throw IllegalArgumentException("Bad expression")
     // expression = 2 + 31 - 40 + 13
     val res1 = Regex("\\-\\s\\d+\\s*").replace(expression, "") // positivnie 2 + 31 + 13
-    println("res1 = " + res1)
+    //println("res1 = " + res1)
     val res2 = Regex("\\+\\s\\d+").replace(expression, "")  // negativnie 2 - 40
     val res3 = Regex("^\\d+\\s").replace(res2, "")  // negativnie - 40
-    println("res3 = " + res3)
+    //println("res3 = " + res3)
 
     val matchedResults = Regex(pattern = "\\d+").findAll(res1) // 2 31 13
     val matchedResults2 = Regex(pattern = "\\d+").findAll(res3) // 40
 
     for (matchedText in matchedResults) {
-        println("res = " + matchedText.value.toInt())
+        //println("res = " + matchedText.value.toInt())
         positivnie_sum += matchedText.value.toInt() // 2 + 31 + 13 = 46
-        println("positivnie_sum = " + positivnie_sum)
+        //println("positivnie_sum = " + positivnie_sum)
         }
     for (matchedText2 in matchedResults2) {
-        println("res = " + matchedText2.value.toInt())
+        //println("res = " + matchedText2.value.toInt())
         negativnie_sum += matchedText2.value.toInt() // 40
-        println("negativnie_sum = " + negativnie_sum)
+        //println("negativnie_sum = " + negativnie_sum)
         }
     common_sum = positivnie_sum - negativnie_sum // 46 - 40 = 6
     return common_sum
@@ -345,6 +348,9 @@ fun fromRoman(roman: String): Int {
     var rest = 0
     var sum = 0
     if (Regex("[^IXMLCVD]").containsMatchIn(roman)) {
+        return -1
+    }
+    if (roman == "") {
         return -1
     }
     val matchedResults = Regex(pattern = """\w+""").findAll(roman)

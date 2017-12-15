@@ -116,11 +116,11 @@ fun rookTrajectory(start: Square, end: Square): List<Square> = TODO()
  */
 fun bishopMoveNumber(start: Square, end: Square): Int {
     val count = 0
-    if (start == end) return count
+    if (start == end) return 0
     if (!start.inside() || !end.inside()) throw IllegalArgumentException()
-    if (Math.abs(start.column - end.column) == Math.abs(start.row - end.row)) return count + 1
-    if (start.column == end.column || start.row == end.row) return count + 2
-    return -1
+    if (Math.abs(start.column - end.column) == Math.abs(start.row - end.row)) return 1
+    if ((start.column + start.row) % 2 != (end.column + end.row) % 2) return -1
+    return 2 //недостижима для слона
 }
 
 /**

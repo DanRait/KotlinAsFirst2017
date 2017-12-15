@@ -182,17 +182,16 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> = TODO()
  */
 fun factorize(n: Int): List<Int> {
     val list = mutableListOf<Int>()
-    var naturalNumber = n
+    var naturalNumber = n //342
     var multiplier = 2
-    while (multiplier <= naturalNumber)
+    while (multiplier <= naturalNumber) // 2<=342....2<=171....3<=171....3<=57....3<=19....19<=19
     {
         if (naturalNumber % multiplier == 0) {
-            naturalNumber /= multiplier
-            if (multiplier < 2) break
-            for (m in 2..Math.sqrt(multiplier.toDouble()).toInt()) {
+            naturalNumber /= multiplier   // 342, 171, 57, 19
+             for (m in 2..naturalNumber) { // 2..19
                 if (multiplier % m == 0) break
             }
-            list += multiplier
+            list += multiplier // 2, 3, 3, 19
         } else
             multiplier += 1
     }
@@ -217,11 +216,14 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*
 fun convert(n: Int, base: Int): List<Int> {
     var number = n
     var list = listOf<Int>()
-    while (number > 0) {
-        list += number % base
-        number /= base
+    if (!(number == 0)) {
+        while (number > 0) {
+            list += number % base
+            number /= base
+        }
+        return list.reversed()
     }
-    return list.reversed()
+    return listOf<Int>(0)
 }
 
 /**
@@ -233,19 +235,28 @@ fun convert(n: Int, base: Int): List<Int> {
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
 fun convertToString(n: Int, base: Int): String {
-    val letters = listOf("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o",
-            "p","q","r","s","t","u","v","w","x","y","z")
-    val listFirst = mutableListOf<Int>()
-    for (i in 0 until convert(n, base).size) {
-        listFirst.add(convert(n, base)[i])
+    //val letters = listOf("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o",
+    //        "p","q","r","s","t","u","v","w","x","y","z")
+    val letters = listOf('a'..'z').flatMap { it }
+    //val letters = listOf('a'..'z')
+    //val listFirst = mutableListOf<Int>()
+    var listFirst: List<Int>
+    var number = n
+    if (!(number == 0)) {
+        //for (i in 0 until convert(n, base).size) {
+        //    listFirst.add(convert(n, base)[i])
+        //}
+        listFirst = convert(n, base)
+        val listSecond = mutableListOf<String>()
+        for (i in 0 until listFirst.size) {
+            if (listFirst[i] > 9) {
+                listSecond.add(letters[listFirst[i] - 10].toString())
+            } else listSecond.add(listFirst[i].toString())
+        }
+        return listSecond.joinToString(separator = "")
     }
-    val listSecond = mutableListOf<String>()
-    for (i in 0 until listFirst.size) {
-        if (listFirst[i] > 9) {
-            listSecond.add(letters[listFirst[i] - 10])
-        } else listSecond.add(listFirst[i].toString())
-    }
-    return listSecond.joinToString(separator = "")}
+    return "0"
+}
 
 /**
  * Средняя
@@ -283,21 +294,22 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    val listOfPairs = listOf(Pair(1, "I"), Pair(4, "IV"),
-            Pair(5, "V"), Pair(9, "IX"), Pair(10, "X"), Pair(40, "XL"), Pair(50, "L"), Pair(90, "XC"),
-            Pair(100, "C"), Pair(400, "CD"), Pair(500, "D"), Pair(900, "CM") , Pair(1000, "M"))
-    var result = ""
+    val numbers = intArrayOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000, 50000) //50000 для границы цикла
+    val symbols = arrayOf<String>("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M", "LIMON")
+    //var result = ""
+    var result = StringBuilder()
     var number = n
-    for (i in 0 until listOfPairs.size) {
-        while (number >= listOfPairs[i].first) {
-            number -= listOfPairs[i].first
-            result += (listOfPairs[i].second)
-
+    while (number > 0) {
+        for (i in 0..(numbers.size - 1)) {
+            if (number < numbers[i]) {
+                number -= numbers[i - 1]
+                result.append(symbols[i - 1])
+                break
+            }
         }
     }
-    return result
+    return result.toString()
 }
-
 /**
  * Очень сложная
  *

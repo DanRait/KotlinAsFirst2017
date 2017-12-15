@@ -2,6 +2,7 @@
 package lesson6.task1
 
 import lesson1.task1.sqr
+import java.lang.Math.*
 
 /**
  * Точка на плоскости
@@ -104,10 +105,13 @@ data class Segment(val begin: Point, val end: Point) {
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
 fun diameter(vararg points: Point): Segment {
-    var max_seg = -1
-    var pointA = points [0]
-    var pointB: Point = points [0]
+    var max_seg = -1.0
+    var pointA = Point(0.0, 0.0)
+    var pointB = Point(0.0, 0.0)
     val pointList = points.toList()
+    if (points.size < 2) {
+        throw IllegalArgumentException()
+    }
     for (i in 0 until points.size) {
         val a= pointList[i]
         for (k in 0 until points.size) {
@@ -115,7 +119,7 @@ fun diameter(vararg points: Point): Segment {
             println("point a = " + a.toString())
             println("point b = " + b.toString())
             if (a.distance(b) > max_seg) {
-                max_seg = a.distance(b).toInt()
+                max_seg = a.distance(b)
                 pointA = a
                 pointB = b
             }
@@ -148,7 +152,7 @@ fun circleByDiameter(diameter: Segment): Circle {
  */
 class Line private constructor(val b: Double, val angle: Double) {
     init {
-        assert(angle >= 0 && angle < Math.PI) { "Incorrect line angle: $angle" }
+        assert(angle >= 0 && angle <= Math.PI) { "Incorrect line angle: $angle" }
     }
 
     constructor(point: Point, angle: Double): this(point.y * Math.cos(angle) - point.x * Math.sin(angle), angle)
@@ -176,25 +180,41 @@ class Line private constructor(val b: Double, val angle: Double) {
  *
  * Построить прямую по отрезку
  */
-fun lineBySegment(s: Segment): Line //= Line(s.begin, Math.atan((s.end.y - s.begin.y) / (s.end.x - s.begin.x)))
-{
-    val firstPosition = Math.atan(s.end.y - s.begin.y)
-    val secondPosition = (s.end.x - s.begin.x)
-    return Line(s.begin, (firstPosition / secondPosition))
+fun lineBySegment(s: Segment): Line {
+    var angle = atan2((s.end.y - s.begin.y), (s.end.x - s.begin.x))
+
+    when {
+        angle < 0 -> angle += PI
+        angle == PI -> angle -= PI
+        else -> IllegalArgumentException("Invalid angle")
+    }
+    return Line(s.begin, angle)
 }
+
 /**
  * Средняя
  *
  * Построить прямую по двум точкам
  */
-fun lineByPoints(a: Point, b: Point): Line = TODO()
+fun lineByPoints(a: Point, b: Point): Line = lineBySegment(Segment(a, b))
 
 /**
  * Сложная
  *
  * Построить серединный перпендикуляр по отрезку или по двум точкам
  */
-fun bisectorByPoints(a: Point, b: Point): Line = TODO()
+fun bisectorByPoints(a: Point, b: Point): Line {
+    val distance =
+            if (lineByPoints(a, b).angle + PI / 2 >= PI) {
+                lineByPoints(a, b).angle - PI / 2
+            } else {
+                lineByPoints(a, b).angle + PI / 2
+            }
+    //отрезок или линия по двум точкам
+    val middlePoint = Point((a.x + b.x) / 2, (a.y + b.y) / 2)
+    //серединный перпендикуляр
+    return Line(middlePoint, distance)
+}
 
 /**
  * Средняя
