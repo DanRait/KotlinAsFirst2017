@@ -268,7 +268,7 @@ fun fibSequenceDigit(n: Int): Int {
     var num = 0
     var answer: Int
 
-    while (num < n) {
+    while (num < n)  {
 
         i++
         num += digitNumber(fib(i))

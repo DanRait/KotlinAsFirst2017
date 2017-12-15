@@ -70,7 +70,17 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 fun sibilants(inputName: String, outputName: String) {
-    TODO()
+    val outputStream = File(outputName).bufferedWriter()
+    val map = mapOf<Char, Char>('ы' to 'и', 'Ы' to 'И', 'я' to 'а', 'Я' to 'А', 'ю' to 'у', 'Ю' to 'У')
+    for (line in File(inputName).readLines()) {
+        for (k in 0..line.length - 1) {
+            if ((line[k] in map.keys) && (line[k - 1] in "ЖжЧчШшЩщ"))
+                outputStream.write(map[line[k]].toString())
+            else outputStream.write(line[k].toString())
+        }
+        outputStream.newLine()
+    }
+    outputStream.close()
 }
 
 /**
@@ -91,7 +101,17 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    val lineAll = File(inputName).readLines().map { it.trim() }
+    var max = 0
+    for (line in lineAll) if (line.length >= max) max = line.length
+    val printer = File(outputName).bufferedWriter()
+    for (i in 0..lineAll.size-1) {
+        for (j in 1..(max-lineAll[i].length)/2)
+        {printer.write(" ")
+        printer.write(lineAll[i])}
+        if (i != lineAll.size - 1) {printer.newLine()}
+    }
+    printer.close()
 }
 
 /**
@@ -139,7 +159,15 @@ fun alignFileByWidth(inputName: String, outputName: String) {
  * Ключи в ассоциативном массиве должны быть в нижнем регистре.
  *
  */
-fun top20Words(inputName: String): Map<String, Int> = TODO()
+fun top20Words(inputName: String): Map<String, Int> {
+    val resultMap = mutableMapOf<String, Int>()
+    val words = Regex("""[a-zа-яё]+""").findAll(File(inputName).readText().toLowerCase())
+    for (word in words) {
+        val value = word.value
+        resultMap.put(value, (resultMap[value] ?: 0) + 1)
+    }
+    return resultMap.toList().sortedByDescending { it.second }.subList(0, 20).toMap()
+}
 
 /**
  * Средняя

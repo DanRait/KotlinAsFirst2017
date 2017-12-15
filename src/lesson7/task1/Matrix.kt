@@ -28,7 +28,7 @@ interface Matrix<E> {
      * Методы могут бросить исключение, если ячейка не существует
      */
     operator fun set(row: Int, column: Int, value: E)
-    operator fun set(cell: Cell, value: E)
+    operator  fun set(cell: Cell, value: E)
 }
 
 /**

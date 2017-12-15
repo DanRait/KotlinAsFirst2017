@@ -374,7 +374,7 @@ fun fromRoman(roman: String): Int {
         for (matchedText in matchedResults2) {
             rest = matchedText.value.toInt()
             println("res = " + rest)
-            sum += rest
+            sum +=  rest
         }
         println ("sum = " + sum)
         return sum
