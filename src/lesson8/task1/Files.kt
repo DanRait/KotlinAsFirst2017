@@ -53,8 +53,41 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
 
+fun String.findOccurrences(substrings: String): Int {
+
+    var result = 0
+    var position = 0
+
+    if (indexOf(substrings) != -1) {
+        while (true) {
+            val foundPosition = indexOf(substrings, position)
+            if (foundPosition == -1) break
+
+            result++
+            position = foundPosition + 1
+        }
+    }
+
+    return result
+
+}
+
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+
+    val result = mutableMapOf<String, Int>()
+    val allText = StringBuilder()
+
+    for (line in File(inputName).readLines()) {
+        allText.append(line.toLowerCase() + " ")
+    }
+
+    for (substr in substrings) {
+        result[substr] = allText.toString().findOccurrences(substr.toLowerCase())
+    }
+
+    return result
+}
 
 /**
  * Средняя
@@ -70,17 +103,22 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 fun sibilants(inputName: String, outputName: String) {
-    val outputStream = File(outputName).bufferedWriter()
+
+    val stream = File(outputName).bufferedWriter()
     val map = mapOf<Char, Char>('ы' to 'и', 'Ы' to 'И', 'я' to 'а', 'Я' to 'А', 'ю' to 'у', 'Ю' to 'У')
+
+
     for (line in File(inputName).readLines()) {
         for (k in 0..line.length - 1) {
             if ((line[k] in map.keys) && (line[k - 1] in "ЖжЧчШшЩщ"))
-                outputStream.write(map[line[k]].toString())
-            else outputStream.write(line[k].toString())
+                stream.write(map[line[k]].toString())
+            else stream.write(line[k].toString())
         }
-        outputStream.newLine()
+
+        stream.newLine()
     }
-    outputStream.close()
+
+    stream.close()
 }
 
 /**
@@ -100,6 +138,38 @@ fun sibilants(inputName: String, outputName: String) {
  * 4) Число строк в выходном файле должно быть равно числу строк во входном (в т. ч. пустых)
  *
  */
+fun Int.createSpace(): String {
+
+    val result = StringBuilder()
+    for (i in 0..this) {
+        result.append(" ")
+    }
+
+    return result.toString()
+}
+
+fun longestString(inputName: String): Int {
+
+    var longest = 0
+    for (line in File(inputName).readLines()) {
+        longest = Math.max(line.trim().length, longest)
+    }
+
+    return longest
+}
+
+fun centerFile(inputName: String, outputName: String) {
+
+    val max = longestString(inputName)
+    File(outputName).bufferedWriter().use {
+        for (line in File(inputName).readLines()) {
+            it.append(((max - line.trim().length) / 2 - 1).createSpace())
+            it.append(line.trim())
+            it.newLine()
+        }
+    }
+}
+/*
 fun centerFile(inputName: String, outputName: String) {
     val lineAll = File(inputName).readLines().map { it.trim() }
     var max = 0
@@ -112,8 +182,7 @@ fun centerFile(inputName: String, outputName: String) {
         if (i != lineAll.size - 1) {printer.newLine()}
     }
     printer.close()
-}
-
+}*/
 /**
  * Сложная
  *
@@ -141,10 +210,71 @@ fun centerFile(inputName: String, outputName: String) {
  * 7) В самой длинной строке каждая пара соседних слов должна быть отделена В ТОЧНОСТИ одним пробелом
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
-fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+fun counterWords(substrings: String): Int {
+
+    var result = 0
+
+    //val correctLine = Regex("\\s+").replace(substrings, " ")
+    //for (word in correctLine.split(" ")) {
+    val matchedWords = Regex(pattern = "[а-я,А-Я]+").findAll(substrings) // 40
+
+    for (matchedText in matchedWords) {
+        result += 1
+    }
+
+    return result
+
 }
 
+fun counterSymbols(substrings: String): Int {
+
+    var result = 0
+
+    val correctLine = Regex("\\s+").replace(substrings, " ")
+    for (word in correctLine.split(" ")) {
+        result += word.length
+    }
+
+    return result
+
+}
+
+
+fun alignFileByWidth(inputName: String, outputName: String) {
+
+    val maxLength = longestString(inputName)
+    File(outputName).bufferedWriter().use {
+        for (line in File(inputName).readLines()) {
+            val correctLine = Regex("\\s+").replace(line, " ")
+            val numberOfWords = counterWords(correctLine)
+            println("number of words is " + numberOfWords)
+            val numberOfSymbols = counterSymbols(correctLine)
+                    //println("number of symbols is " + numberOfSymbols)
+            var newLine = ""
+            var newLine2 = ""
+            var spaces = 1
+            if (numberOfWords > 2 ) {
+                spaces = (maxLength - numberOfSymbols) / (numberOfWords - 1)
+            }
+            if (numberOfWords == 1) {
+                spaces = (maxLength - numberOfSymbols) / 2
+            }
+            //if (!line.isEmpty()) {
+                //while (newLine.trim().length <= maxLength) {
+                    for (word in correctLine.split(" ")) {
+                        newLine += word + spaces.createSpace()
+                        //i += 1 // kol-vo slov
+                        //i++
+                    }
+                    //(maxLength - newLine2) / (i - 1)
+                    //if (newLine.trim().length >= maxLength) break else newLine = newLine.trim()
+                    //i++
+                //}
+           // }
+            it.write(newLine.trim() + "\n")
+        }
+    }
+}
 /**
  * Средняя
  *
@@ -160,6 +290,8 @@ fun alignFileByWidth(inputName: String, outputName: String) {
  *
  */
 fun top20Words(inputName: String): Map<String, Int> {
+  TODO()
+    /*
     val resultMap = mutableMapOf<String, Int>()
     val words = Regex("""[a-zа-яё]+""").findAll(File(inputName).readText().toLowerCase())
     for (word in words) {
@@ -167,6 +299,7 @@ fun top20Words(inputName: String): Map<String, Int> {
         resultMap.put(value, (resultMap[value] ?: 0) + 1)
     }
     return resultMap.toList().sortedByDescending { it.second }.subList(0, 20).toMap()
+*/
 }
 
 /**
