@@ -96,7 +96,7 @@ fun dateStrToDigit(str: String): String {
             if (number == 3) year = res
             println( "---" + day.toInt() + " " + month + " " + year)
         }
-        if (year == "0") {
+        if (year.toInt() < 10) {
             return String.format("%02d.%02d.%d", day.toInt(), month.toInt(), year.toInt())
         } else {
             return String.format("%02d.%02d.%02d", day.toInt(), month.toInt(), year.toInt())
@@ -248,7 +248,7 @@ fun bestHighJump(jumps: String): Int {
     println ("res2 = " + res2)
     val res3 = Regex("\\d+\\s{1}\\-+").replace(res2, "") // "123 ---" -> ""   | 220 + 224 +  230 +
     println ("res3 = " + res3)
-    if (res3 == "") {
+    if (!Regex("""\d+""").containsMatchIn(res3)) {
         return -1
     }
     val matchedResults = Regex(pattern = "\\d+").findAll(res3)
@@ -282,7 +282,12 @@ fun plusMinus(expression: String): Int {
     if (Regex("[\\+\\-]\\s[\\+\\-]").containsMatchIn(expression)) { //Наличие двух знаков подряд "13 + + 10" не допускается
         return -1
     }
-    if (Regex("[^\\+\\-\\d\\s]").containsMatchIn(expression)) throw IllegalArgumentException("Bad expression")
+    if (Regex("[^\\+\\-\\d\\s]").containsMatchIn(expression)) {
+        throw IllegalArgumentException("Bad expression")
+    }
+    if (Regex("^$").containsMatchIn(expression)) {
+        throw IllegalArgumentException("Bad expression")
+    }
     // expression = 2 + 31 - 40 + 13
     val res1 = Regex("\\-\\s\\d+\\s*").replace(expression, "") // positivnie 2 + 31 + 13
     //println("res1 = " + res1)

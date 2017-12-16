@@ -195,7 +195,7 @@ fun factorize(n: Int): List<Int> {
         } else
             multiplier += 1
     }
-    return  list.sorted()
+    return list.sorted()
 }
 
 /**
