@@ -210,8 +210,8 @@ fun bestHighJump(jumps: String): Int {
     val correctFormat = Regex("""\d+\s+[-+%]+\s+""").replace(jumps + " ", " ")
     if (!Regex("""\s+""").containsMatchIn(correctFormat)) return -1
     // jump = 220 + 224 %+ 228 %- 230 + 232 %%- 234 %
-    val res1 = Regex("\\%+\\+").replace(jumps, "\\+") // %+ -> +   | 220 + 224 + 228 %- 230 + 232 %%- 234 %
-    val res2 = Regex("\\d+\\s{1}\\%+-*").replace(res1, "")  // %, %-, %%- -> ""  | 220 + 224 + 230 +
+    val res1 = Regex("\\%+\\+").replace(jumps, "\\+") // %+ -> +   | 220 + 224 + 228 %-
+    val res2 = Regex("\\d+\\s{1}\\%+-*").replace(res1, "")  // %, %-, %%- -> "" | 220 + 224
 
     if (!Regex("""\d+""").containsMatchIn(res2)) {
         return -1
@@ -240,39 +240,32 @@ fun plusMinus(expression: String): Int {
     var common_sum = 0
     var negativnie_sum = 0
     var positivnie_sum = 0
-
+    val correct = expression.matches(Regex("""(?:\d+\s*[-+]\s*)+\d+|\d+"""))
+    if (!correct) {
+        throw IllegalArgumentException("Bad expression")
+    }
     if (Regex("\\d+\\s\\d+").containsMatchIn(expression)) { // двух чисел подряд "1 2" не допускается
         return -1
     }
-    if (Regex("[\\+\\-]\\s[\\+\\-]").containsMatchIn(expression)) { //Наличие двух знаков подряд "13 + + 10" не допускается
+    if (Regex("[\\+\\-]\\s[\\+\\-]").containsMatchIn(expression)) { //Наличие двух знаков подряд не допускается
         return -1
     }
     if (Regex("[^\\+\\-\\d\\s]").containsMatchIn(expression)) {
         throw IllegalArgumentException("Bad expression")
     }
-    if (Regex("^$").containsMatchIn(expression)) {
-        throw IllegalArgumentException("Bad expression")
-    }
-    // expression = 2 + 31 - 40 + 13
     val res1 = Regex("\\-\\s\\d+\\s*").replace(expression, "") // positivnie 2 + 31 + 13
-    //println("res1 = " + res1)
     val res2 = Regex("\\+\\s\\d+").replace(expression, "")  // negativnie 2 - 40
     val res3 = Regex("^\\d+\\s").replace(res2, "")  // negativnie - 40
-    //println("res3 = " + res3)
 
     val matchedResults = Regex(pattern = "\\d+").findAll(res1) // 2 31 13
     val matchedResults2 = Regex(pattern = "\\d+").findAll(res3) // 40
 
     for (matchedText in matchedResults) {
-        //println("res = " + matchedText.value.toInt())
         positivnie_sum += matchedText.value.toInt() // 2 + 31 + 13 = 46
-        //println("positivnie_sum = " + positivnie_sum)
-        }
+    }
     for (matchedText2 in matchedResults2) {
-        //println("res = " + matchedText2.value.toInt())
         negativnie_sum += matchedText2.value.toInt() // 40
-        //println("negativnie_sum = " + negativnie_sum)
-        }
+    }
     common_sum = positivnie_sum - negativnie_sum // 46 - 40 = 6
     return common_sum
 
