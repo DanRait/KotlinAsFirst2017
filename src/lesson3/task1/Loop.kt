@@ -4,9 +4,10 @@ package lesson3.task1
 
 import lesson4.task1.convertToString
 import java.lang.Math.pow
-fun sequenceDigit (n: Int, m: Int): Int {
+
+fun sequenceDigit(n: Int, m: Int): Int {
     var numberN = n
-    for (i in 1..m){
+    for (i in 1..m) {
         numberN = numberN / 10
     }
     return numberN % 10
@@ -108,13 +109,12 @@ fun fib(n: Int): Int {
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int {
+fun lcm(m: Int, n: Int): Int {//24: 6,8
     var multiplication = m * n
     var leastCommonMultiple = 0
     var firstNumber = m
     var secondNumber = n
-    leastCommonMultiple = multiplication / m
-      while (firstNumber != secondNumber) {
+    while (firstNumber != secondNumber) {
         if (firstNumber > secondNumber) {
             firstNumber = firstNumber - secondNumber
         } else {
@@ -133,12 +133,10 @@ fun lcm(m: Int, n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    var divisor = 2
-    for (i in 1..n ){
-        if (n % divisor != 0) divisor += 1
-        else break
+    for (i in 2..n) {
+        if (n % i == 0) return i
     }
-    return divisor
+    return n
 }
 
 /**
@@ -147,14 +145,12 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var divisor = n - 1
     for (i in n - 1 downTo 1) {
-        if (n % divisor == 0) break
-        else {
-            divisor -= 1; }
+        if (n % i == 0) return i
     }
-    return divisor
+    return 1
 }
+
 
 /**
  * Простая
@@ -218,6 +214,7 @@ fun revert(n: Int): Int {
 fun isPalindrome(n: Int): Boolean {
     return revert(n) == n
 }
+
 /**
  * Средняя
  *
@@ -243,15 +240,11 @@ fun squareSequenceDigit(n: Int): Int {
     var square = 0
     do {
         number++
-        println("number = : $number")
         square = number * number
-        println("square = : $square")
         long += digitNumber(square)
-        println("long = : $long")
     } while (long < n)
     return sequenceDigit(square, long - n)
 }
-
 
 
 /**
@@ -268,7 +261,7 @@ fun fibSequenceDigit(n: Int): Int {
     var num = 0
     var answer: Int
 
-    while (num < n)  {
+    while (num < n) {
 
         i++
         num += digitNumber(fib(i))

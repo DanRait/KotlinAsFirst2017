@@ -188,9 +188,6 @@ fun factorize(n: Int): List<Int> {
     {
         if (naturalNumber % multiplier == 0) {
             naturalNumber /= multiplier   // 342, 171, 57, 19
-             for (m in 2..naturalNumber) { // 2..19
-                if (multiplier % m == 0) break
-            }
             list += multiplier // 2, 3, 3, 19
         } else
             multiplier += 1
@@ -235,17 +232,10 @@ fun convert(n: Int, base: Int): List<Int> {
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
 fun convertToString(n: Int, base: Int): String {
-    //val letters = listOf("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o",
-    //        "p","q","r","s","t","u","v","w","x","y","z")
     val letters = listOf('a'..'z').flatMap { it }
-    //val letters = listOf('a'..'z')
-    //val listFirst = mutableListOf<Int>()
     var listFirst: List<Int>
     var number = n
-    if (!(number == 0)) {
-        //for (i in 0 until convert(n, base).size) {
-        //    listFirst.add(convert(n, base)[i])
-        //}
+    if (number != 0) {
         listFirst = convert(n, base)
         val listSecond = mutableListOf<String>()
         for (i in 0 until listFirst.size) {
@@ -294,22 +284,21 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    val numbers = intArrayOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000, 50000) //50000 для границы цикла
-    val symbols = arrayOf<String>("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M", "LIMON")
-    //var result = ""
+    val numbers = intArrayOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
+    val symbols = arrayOf<String>("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
+    var i = 12
     var result = StringBuilder()
     var number = n
     while (number > 0) {
-        for (i in 0..(numbers.size - 1)) {
-            if (number < numbers[i]) {
-                number -= numbers[i - 1]
-                result.append(symbols[i - 1])
-                break
-            }
+        while (number >= numbers[i]) {
+            number -= numbers[i]
+            result.append(symbols[i])
         }
+        i--
     }
     return result.toString()
 }
+
 /**
  * Очень сложная
  *
