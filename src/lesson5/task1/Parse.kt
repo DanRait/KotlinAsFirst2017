@@ -68,44 +68,34 @@ fun main(args: Array<String>) {
  * День и месяц всегда представлять двумя цифрами, например: 03.04.2011.
  * При неверном формате входной строки вернуть пустую строку
  */
-
 fun dateStrToDigit(str: String): String {
     val parts = str.split(" ")
-    var result = ""
-    var res = ""
-    var day = ""
-    var month = ""
-    var year = ""
-    var number = 0
-    try {
-        for (part in parts) {
-            number += 1
-            res = part
-            println (res)
-            if (number == 1) day = res
-            if (number == 2) {
-                val listOfPairs = listOf(Pair("января", "01"), Pair("февраля", "02"), Pair("марта", "03"), Pair("апреля", "04"), Pair("мая", "05"), Pair("июня", "06"), Pair("июля", "07"), Pair("августа", "08"), Pair("сентября", "09"), Pair("октября", "10"), Pair("ноября", "11"), Pair("декабря", "12"))
-                for (i in 0 until listOfPairs.size) {
-                    if (part == listOfPairs[i].first) {
-                        res = listOfPairs[i].second
-                        println ("res" + res)
-                    }
-                }
-                month = res
-            }
-            if (number == 3) year = res
-            println( "---" + day.toInt() + " " + month + " " + year)
-        }
-        if (year.toInt() < 10) {
-            return String.format("%02d.%02d.%d", day.toInt(), month.toInt(), year.toInt())
-        } else {
-            return String.format("%02d.%02d.%02d", day.toInt(), month.toInt(), year.toInt())
-        }
-    } catch (e: NumberFormatException) {
+    if (parts.size != 3) {
         return ""
     }
+    var day = parts[0].toInt()
+    var month = parts[1]
+    var year = parts[2].toInt()
+    val listOfMonths = listOf("января", "февраля", "марта", "апреля", "мая", "июня",
+            "июля", "августа", "сентября", "октября", "ноября", "декабря")
+    if (!listOfMonths.contains(month)) {
+        return ""
+    }
+    for (i in 1..12) {
+        if (month == listOfMonths[i - 1]) {
+            month = i.toString()
+        }
+    }
+    if (day <= 0 || day > 31) {
+        return ""
+    }
+    if (year < 0) {
+        return ""
+    }
+    return String.format("%02d.%02d.%d", day, month.toInt(), year)
 }
- 
+
+
 /**
  * Средняя
  *
@@ -114,45 +104,34 @@ fun dateStrToDigit(str: String): String {
  * При неверном формате входной строки вернуть пустую строку
  */
 fun dateDigitToStr(digital: String): String {
-    val parts = digital.split(  ".")
-    var result = ""
-    var res = ""
-    var day = ""
-    var month = ""
-    var year = ""
-    var number = 0
+    val parts = digital.split(".")
     try {
-        for (part in parts) {
-            number += 1
-            res = part
-            if (number == 1) day = res
-            if (number == 2) {
-                val listOfPairs = listOf(Pair("января", "01"), Pair("февраля", "02"), Pair("марта", "03"), Pair("апреля", "04"), Pair("мая", "05"), Pair("июня", "06"), Pair("июля", "07"), Pair("августа", "08"), Pair("сентября", "09"), Pair("октября", "10"), Pair("ноября", "11"), Pair("декабря", "12"))
-                for (i in 0 until listOfPairs.size) {
-                    if (part == listOfPairs[i].second) {
-                        res = listOfPairs[i].first
-                        break
-                    } else res = ""
-                }
-                month = res
-            }
-            if (number == 3) year = res
-            if (number > 3) return ""
+        if (parts.size != 3) {
+            return ""
         }
-        println(day.toInt().toString() + month + year)
-        if ( month == "") {
-            result = ""
-        } else {
-            result = day.toInt().toString() + " " + month + " " + year
+        var day = parts[0].toInt()
+        var month = parts[1].toInt()
+        var year = parts[2].toInt()
+        val listOfMonths = listOf("января", "февраля", "марта", "апреля", "мая", "июня",
+                "июля", "августа", "сентября", "октября", "ноября", "декабря")
+        if (day <= 0 || day > 31) {
+            return ""
         }
-        //return String.format("%s:%s:%s", day.toString(), month.toString(), year.toString())
-        return result.toString()
-        //println(String.format("%02d.%02d.%02d", day.toInt(), month, year.toInt()))
-        //return String.format("%02d.%02d.%02d", day.toInt(), month, year.toInt())
+        if (month <= 0 || month > 12) {
+            return ""
+        }
+        if (year < 0) {
+            return ""
+        }
+        var month_str = listOfMonths[month - 1]
+        return (day.toString() + " " + month_str + " " + year.toString())
     } catch (e: NumberFormatException) {
         return ""
     }
 }
+
+
+
 
 /**
  * Средняя
@@ -167,24 +146,8 @@ fun dateDigitToStr(digital: String): String {
  * При неверном формате вернуть пустую строку
  */
 fun flattenPhoneNumber(phone: String): String {
-    val parts = phone.split(" ", "-", "(", ")", "_")
-    var result = ""
-    var res = ""
-    var pattern = Regex("^\\+?[0123456789]*")
-    if (Regex("[^\\s\\d\\+\\-\\(\\)]").containsMatchIn(phone)) {
-        return ""
-    }
-    try {
-        for (part in parts) {
-            res += part
-        }
-        if (res.matches(pattern)) {
-            result = res
-        } else result = ""
-        return result
-        } catch (e: NumberFormatException) {
-        return ""
-    }
+    if (!phone.matches(Regex("""\+?[()\s\d-]+"""))) return ""
+    return phone.replace(Regex("""[()\s-]"""), "")
 }
 
 /**
@@ -207,6 +170,9 @@ fun bestLongJump(jumps: String): Int {
     if (Regex("[^\\s\\d\\-%]").containsMatchIn(jumps)) {
         return -1
     }
+    if (Regex("""[%-]+\d+""").containsMatchIn(jumps)) {
+        return -1
+    }
     val matchedResults = Regex(pattern = """\d+""").findAll(jumps)
     try {
         for (matchedText in matchedResults) {
@@ -217,7 +183,7 @@ fun bestLongJump(jumps: String): Int {
             }
         }
         return biggest
-        } catch (e: NumberFormatException) {
+    } catch (e: NumberFormatException) {
         return -1
     }
 }
@@ -241,17 +207,16 @@ fun bestHighJump(jumps: String): Int {
     if (Regex("[^\\s\\d+\\-%\\+]").containsMatchIn(jumps)) {
         return -1
     }
+    val correctFormat = Regex("""\d+\s+[-+%]+\s+""").replace(jumps + " ", " ")
+    if (!Regex("""\s+""").containsMatchIn(correctFormat)) return -1
     // jump = 220 + 224 %+ 228 %- 230 + 232 %%- 234 %
-    val res1 = Regex("\\%+?\\+").replace(jumps, "\\+") // %+ -> +   | 220 + 224 + 228 %- 230 + 232 %%- 234 %
-    println ("res1 = " + res1)
-    val res2 = Regex("\\%+?\\-*?").replace(res1, "-")  // %%- -> -  | 220 + 224 + 228 -- 230 + 232 --- 234 -
-    println ("res2 = " + res2)
-    val res3 = Regex("\\d+\\s{1}\\-+").replace(res2, "") // "123 ---" -> ""   | 220 + 224 +  230 +
-    println ("res3 = " + res3)
-    if (!Regex("""\d+""").containsMatchIn(res3)) {
+    val res1 = Regex("\\%+\\+").replace(jumps, "\\+") // %+ -> +   | 220 + 224 + 228 %- 230 + 232 %%- 234 %
+    val res2 = Regex("\\d+\\s{1}\\%+-*").replace(res1, "")  // %, %-, %%- -> ""  | 220 + 224 + 230 +
+
+    if (!Regex("""\d+""").containsMatchIn(res2)) {
         return -1
     }
-    val matchedResults = Regex(pattern = "\\d+").findAll(res3)
+    val matchedResults = Regex(pattern = "\\d+").findAll(res2)
             for (matchedText in matchedResults) {
             rest = matchedText.value.toInt()
             if (rest > bestResult) {
@@ -349,7 +314,6 @@ fun mostExpensive(description: String): String = TODO()
  * Вернуть -1, если roman не является корректным римским числом
  */
 fun fromRoman(roman: String): Int {
-    println(roman)
     var rest = 0
     var sum = 0
     if (Regex("[^IXMLCVD]").containsMatchIn(roman)) {
@@ -358,34 +322,19 @@ fun fromRoman(roman: String): Int {
     if (roman == "") {
         return -1
     }
-    val matchedResults = Regex(pattern = """\w+""").findAll(roman)
-    val res1 = Regex("IX").replace(roman, "9 ")
-    val res2 = Regex("IV").replace(res1, "4 ")
-    val res3 = Regex("XL").replace(res2, "40 ")
-    val res4 = Regex("XC").replace(res3, "90 ")
-    val res5 = Regex("CD").replace(res4, "400 ")
-    val res6 = Regex("CM").replace(res5, "900 ")
-    val res7 = Regex("M").replace(res6, "1000 ")
-    val res8 = Regex("D").replace(res7, "500 ")
-    val res9 = Regex("C").replace(res8, "100 ")
-    val res10 = Regex("L").replace(res9, "50 ")
-    val res11 = Regex("X").replace(res10, "10 ")
-    val res12 = Regex("V").replace(res11, "5 ")
-    val res13 = Regex("I").replace(res12, "1 ")
-    println ("---" + res13)
-
-    val matchedResults2 = Regex(pattern = """\d+""").findAll(res13)
-    try {
-        for (matchedText in matchedResults2) {
-            rest = matchedText.value.toInt()
-            println("res = " + rest)
-            sum +=  rest
+    val numbers = intArrayOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    val symbols = arrayOf<String>("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    var result = roman
+    while (result.length > 0) {
+        for (i in 0..12) {
+            val put = "MMM"
+            if (Regex("^${symbols[i]}").containsMatchIn(result)) {
+                sum += numbers[i]
+                result = Regex("^${symbols[i]}").replace(result, "")
+            }
         }
-        println ("sum = " + sum)
-        return sum
-    } catch (e: NumberFormatException) {
-        return -1
     }
+    return sum
 }
 
 
