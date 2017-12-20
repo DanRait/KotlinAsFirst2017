@@ -133,7 +133,11 @@ fun lcm(m: Int, n: Int): Int {//24: 6,8
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    for (i in 2..n) {
+    val number = Math.sqrt(n.toDouble()).toInt()//теория чисел: переберать надо только числа, не превосходящие
+    // корня из искомого. Среди всех пар, предполагаемая пара с максимальным наименьшим — это пара с
+    // равными pi и qi, то есть pi * pi = M => pi =  sqrt(M)
+    if (isPrime(n)) return n
+    for (i in 2..number) {
         if (n % i == 0) return i
     }
     return n
@@ -145,7 +149,9 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    for (i in n - 1 downTo 1) {
+    val number = n / 2
+    if (isPrime(n)) return 1
+    for (i in number downTo 1) {
         if (n % i == 0) return i
     }
     return 1

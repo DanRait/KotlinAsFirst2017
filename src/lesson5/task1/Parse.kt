@@ -86,7 +86,7 @@ fun dateStrToDigit(str: String): String {
             month = i.toString()
         }
     }
-    if (day <= 0 || day > 31) {
+    if (day in 1..31) {
         return ""
     }
     if (year < 0) {
@@ -94,6 +94,7 @@ fun dateStrToDigit(str: String): String {
     }
     return String.format("%02d.%02d.%d", day, month.toInt(), year)
 }
+
 
 
 /**
@@ -123,10 +124,11 @@ fun dateDigitToStr(digital: String): String {
         if (year < 0) {
             return ""
         }
-        var month_str = listOfMonths[month - 1]
-        return (day.toString() + " " + month_str + " " + year.toString())
+        var monthStr = listOfMonths[month - 1]
+        return (day.toString() + " " + monthStr + " " + year.toString())
     } catch (e: NumberFormatException) {
         return ""
+
     }
 }
 
@@ -147,7 +149,9 @@ fun dateDigitToStr(digital: String): String {
  */
 fun flattenPhoneNumber(phone: String): String {
     if (!phone.matches(Regex("""\+?[()\s\d-]+"""))) return ""
-    return phone.replace(Regex("""[()\s-]"""), "")
+    var modifiedPhone = phone.replace(Regex("""[()\s-]"""), "")
+    if (!modifiedPhone.matches(Regex("""\+?\d+"""))) return ""
+    return modifiedPhone
 }
 
 /**
@@ -170,14 +174,13 @@ fun bestLongJump(jumps: String): Int {
     if (Regex("[^\\s\\d\\-%]").containsMatchIn(jumps)) {
         return -1
     }
-    if (Regex("""[%-]+\d+""").containsMatchIn(jumps)) {
+    if (Regex("""%-|-%|%%|--|\s\s|\d[%-]+|[-%]+\d""").containsMatchIn(jumps)) {
         return -1
     }
     val matchedResults = Regex(pattern = """\d+""").findAll(jumps)
     try {
         for (matchedText in matchedResults) {
             rest = matchedText.value.toInt()
-            println("res = " + rest)
             if (rest > biggest) {
                 biggest = rest
             }
@@ -211,8 +214,8 @@ fun bestHighJump(jumps: String): Int {
     if (!Regex("""\s+""").containsMatchIn(correctFormat)) return -1
     // jump = 220 + 224 %+ 228 %- 230 + 232 %%- 234 %
     val res1 = Regex("\\%+\\+").replace(jumps, "\\+") // %+ -> +   | 220 + 224 + 228 %-
-    val res2 = Regex("\\d+\\s{1}\\%+-*").replace(res1, "")  // %, %-, %%- -> "" | 220 + 224
-
+    val res2 = Regex("\\d+\\s{1}\\%+-*|\\d+\\s{1}-+").replace(res1, "")  // %, %-, %%-, -- ->
+    // "" | 220 + 224
     if (!Regex("""\d+""").containsMatchIn(res2)) {
         return -1
     }
@@ -237,37 +240,37 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    var common_sum = 0
-    var negativnie_sum = 0
-    var positivnie_sum = 0
-    val correct = expression.matches(Regex("""(?:\d+\s*[-+]\s*)+\d+|\d+"""))
+    var commonSum = 0
+    var negativeSum = 0
+    var positiveSum = 0
+    val correct = expression.matches(Regex("""(?:\d+\s[-+]\s)+\d+|\d+"""))
     if (!correct) {
         throw IllegalArgumentException("Bad expression")
     }
-    if (Regex("\\d+\\s\\d+").containsMatchIn(expression)) { // двух чисел подряд "1 2" не допускается
+    if (Regex("\\d+\\s\\d+").containsMatchIn(expression)) {
         return -1
     }
-    if (Regex("[\\+\\-]\\s[\\+\\-]").containsMatchIn(expression)) { //Наличие двух знаков подряд не допускается
+    if (Regex("[\\+\\-]\\s[\\+\\-]").containsMatchIn(expression)) {
         return -1
     }
     if (Regex("[^\\+\\-\\d\\s]").containsMatchIn(expression)) {
         throw IllegalArgumentException("Bad expression")
     }
-    val res1 = Regex("\\-\\s\\d+\\s*").replace(expression, "") // positivnie 2 + 31 + 13
-    val res2 = Regex("\\+\\s\\d+").replace(expression, "")  // negativnie 2 - 40
-    val res3 = Regex("^\\d+\\s").replace(res2, "")  // negativnie - 40
+    val res1 = Regex("\\-\\s\\d+\\s*").replace(expression, "") // positive 2 + 31 + 13
+    val res2 = Regex("\\+\\s\\d+").replace(expression, "")  // negative 2 - 40
+    val res3 = Regex("^\\d+\\s").replace(res2, "")  // negative - 40
 
     val matchedResults = Regex(pattern = "\\d+").findAll(res1) // 2 31 13
     val matchedResults2 = Regex(pattern = "\\d+").findAll(res3) // 40
 
     for (matchedText in matchedResults) {
-        positivnie_sum += matchedText.value.toInt() // 2 + 31 + 13 = 46
+        positiveSum += matchedText.value.toInt() // 2 + 31 + 13 = 46
     }
     for (matchedText2 in matchedResults2) {
-        negativnie_sum += matchedText2.value.toInt() // 40
+        negativeSum += matchedText2.value.toInt() // 40
     }
-    common_sum = positivnie_sum - negativnie_sum // 46 - 40 = 6
-    return common_sum
+    commonSum = positiveSum - negativeSum // 46 - 40 = 6
+    return commonSum
 
 }
 
@@ -315,15 +318,15 @@ fun fromRoman(roman: String): Int {
     if (roman == "") {
         return -1
     }
-    val numbers = intArrayOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
-    val symbols = arrayOf<String>("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    val listOfPairs = listOf(Pair(1000, "M"), Pair(900, "CM"), Pair(500, "D"), Pair(400, "CD"), Pair(100, "C"),
+            Pair(90, "XC"), Pair(50, "L"), Pair(40, "XL"), Pair(10, "X"), Pair(9, "IX"), Pair(5, "V"),
+            Pair(4, "IV"), Pair(1, "I"))
     var result = roman
     while (result.length > 0) {
-        for (i in 0..12) {
-            val put = "MMM"
-            if (Regex("^${symbols[i]}").containsMatchIn(result)) {
-                sum += numbers[i]
-                result = Regex("^${symbols[i]}").replace(result, "")
+        for (i in 0 until listOfPairs.size) {
+            if (Regex("^${listOfPairs[i].second}").containsMatchIn(result)) {
+                sum += listOfPairs[i].first
+                result = Regex("^${listOfPairs[i].second}").replace(result, "")
             }
         }
     }

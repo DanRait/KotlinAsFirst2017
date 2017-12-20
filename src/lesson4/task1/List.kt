@@ -183,14 +183,21 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> = TODO()
 fun factorize(n: Int): List<Int> {
     val list = mutableListOf<Int>()
     var naturalNumber = n //342
-    var multiplier = 2
-    while (multiplier <= naturalNumber) // 2<=342....2<=171....3<=171....3<=57....3<=19....19<=19
+    var multiplier = 1
+    if (isPrime(naturalNumber)) return list + naturalNumber
+    while (multiplier <= Math.sqrt(naturalNumber.toDouble()).toInt()) // 2<=342....2<=171....3<=171....3<=57....3<=19....19<=19
     {
-        if (naturalNumber % multiplier == 0) {
-            naturalNumber /= multiplier   // 342, 171, 57, 19
-            list += multiplier // 2, 3, 3, 19
-        } else
-            multiplier += 1
+        multiplier++
+        if (isPrime(naturalNumber)) {
+            list += naturalNumber
+            break
+        } else {
+            if (naturalNumber % multiplier == 0) {
+                naturalNumber /= multiplier   // 342, 171, 57, 19
+                list += multiplier // 2, 3, 3, 19
+                multiplier = 1
+            }
+        }
     }
     return list.sorted()
 }
