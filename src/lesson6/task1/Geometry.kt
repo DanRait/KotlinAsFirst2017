@@ -105,29 +105,21 @@ data class Segment(val begin: Point, val end: Point) {
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
 fun diameter(vararg points: Point): Segment {
-    var max_seg = -1.0
+    var maxSeg = -1.0
     var pointA = Point(0.0, 0.0)
     var pointB = Point(0.0, 0.0)
-    val pointList = points.toList()
     if (points.size < 2) {
         throw IllegalArgumentException()
     }
-    for (i in 0 until points.size) {
-        val a= pointList[i]
-        for (k in 0 until points.size) {
-            val b= pointList[k]
-            println("point a = " + a.toString())
-            println("point b = " + b.toString())
-            if (a.distance(b) > max_seg) {
-                max_seg = a.distance(b)
+    for (a in points) {
+        for (b in points.filter { it != a }) {
+            if (a.distance(b) > maxSeg) {
+                maxSeg = a.distance(b)
                 pointA = a
                 pointB = b
             }
         }
     }
-    println ("max_seg = " + max_seg)
-    println ("pointA = " + pointA)
-    println ("pointB = " + pointB)
     return Segment(pointA, pointB)
 }
 
@@ -186,7 +178,6 @@ fun lineBySegment(s: Segment): Line {
     when {
         angle < 0 -> angle += PI
         angle == PI -> angle -= PI
-        else -> IllegalArgumentException("Invalid angle")
     }
     return Line(s.begin, angle)
 }
@@ -204,16 +195,14 @@ fun lineByPoints(a: Point, b: Point): Line = lineBySegment(Segment(a, b))
  * Построить серединный перпендикуляр по отрезку или по двум точкам
  */
 fun bisectorByPoints(a: Point, b: Point): Line {
-    val distance =
-            if (lineByPoints(a, b).angle + PI / 2 >= PI) {
-                lineByPoints(a, b).angle - PI / 2
-            } else {
-                lineByPoints(a, b).angle + PI / 2
-            }
-    //отрезок или линия по двум точкам
+    var newAngle = lineByPoints(a, b).angle
+    if (newAngle + PI / 2 >= PI) {
+        newAngle -= PI / 2
+    } else {
+        newAngle +=  PI / 2
+    }
     val middlePoint = Point((a.x + b.x) / 2, (a.y + b.y) / 2)
-    //серединный перпендикуляр
-    return Line(middlePoint, distance)
+    return Line(middlePoint, newAngle)
 }
 
 /**

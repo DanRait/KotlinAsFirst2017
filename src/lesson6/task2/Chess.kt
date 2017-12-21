@@ -1,6 +1,9 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson6.task2
 
+import java.lang.Math
+import java.lang.Math.abs
+
 /**
  * Клетка шахматной доски. Шахматная доска квадратная и имеет 8 х 8 клеток.
  * Поэтому, обе координаты клетки (горизонталь row, вертикаль column) могут находиться в пределах от 1 до 8.
@@ -22,19 +25,12 @@ data class Square(val column: Int, val row: Int) {
      * Для клетки не в пределах доски вернуть пустую строку
      */
     fun notation(): String {
-        if (inside()) {
-            if (column == 1) return "a" + "${row}"
-            else if (column == 2) return "b" + "${row}"
-            else if (column == 3) return "c" + "${row}"
-            else if (column == 4) return "d" + "${row}"
-            else if (column == 5) return "e" + "${row}"
-            else if (column == 6) return "f" + "${row}"
-            else if (column == 7) return "g" + "${row}"
-            else if (column == 8) return "h" + "${row}"
-            else return ""
-        } else return ""
+        if (!inside()) return ""
+        val cell = ((column + 'a'.toInt() - 1).toChar()).toString() + "${row}"
+        return cell
     }
 }
+
 
 /**
  * Простая
@@ -44,11 +40,11 @@ data class Square(val column: Int, val row: Int) {
  * Если нотация некорректна, бросить IllegalArgumentException
  */
 fun square(notation: String): Square {
-    val columnNotation = listOf<Char>('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
-    val row = listOf<Char>('1', '2', '3', '4', '5', '6', '7', '8')
+    val columnNotation = listOf('a'..'h').flatMap { it }
+    val row = listOf('1'..'8').flatMap { it }
     if (notation.length != 2 || notation[0] !in columnNotation || notation[1] !in row) throw IllegalArgumentException()
     return Square(columnNotation.indexOf(notation[0]) + 1, row.indexOf(notation[1]) + 1)
-    }
+}
 
 /**
  * Простая
@@ -112,15 +108,16 @@ fun rookTrajectory(start: Square, end: Square): List<Square> = TODO()
  * Если любая из клеток некорректна, бросить IllegalArgumentException().
  *
  * Примеры: bishopMoveNumber(Square(3, 1), Square(6, 3)) = -1; bishopMoveNumber(Square(3, 1), Square(3, 7)) = 2.
+ * bishopMoveNumber(square("a3"), square("e7")) = 1 // from test
  * Слон может пройти через клетку (6, 4) к клетке (3, 7).
  */
 fun bishopMoveNumber(start: Square, end: Square): Int {
-    val count =  0
+    val count = 0
     if (start == end) return 0
     if (!start.inside() || !end.inside()) throw IllegalArgumentException()
-    if (Math.abs(start.column - end.column) == Math.abs(start.row - end.row)) return 1
+    if (abs(start.column - end.column) == abs(start.row - end.row)) return 1
     if ((start.column + start.row) % 2 != (end.column + end.row) % 2) return -1
-    return 2 //недостижима для слона
+    return 2
 }
 
 /**
@@ -165,7 +162,8 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> = TODO()
  */
 fun kingMoveNumber(start: Square, end: Square): Int {
     when {
-        (start.inside() && end.inside()) -> return Math.max(Math.abs(end.column - start.column), Math.abs(end.row - start.row))
+        (start.inside() && end.inside()) -> return Math.max(Math.abs(end.column - start.column),
+                Math.abs(end.row - start.row))
         else -> throw IllegalArgumentException()
     }
 }
