@@ -3,6 +3,7 @@ package lesson6.task2
 
 import java.lang.Math
 import java.lang.Math.abs
+import java.lang.Math.max
 
 /**
  * Клетка шахматной доски. Шахматная доска квадратная и имеет 8 х 8 клеток.
@@ -112,7 +113,6 @@ fun rookTrajectory(start: Square, end: Square): List<Square> = TODO()
  * Слон может пройти через клетку (6, 4) к клетке (3, 7).
  */
 fun bishopMoveNumber(start: Square, end: Square): Int {
-    val count = 0
     if (start == end) return 0
     if (!start.inside() || !end.inside()) throw IllegalArgumentException()
     if (abs(start.column - end.column) == abs(start.row - end.row)) return 1
@@ -162,8 +162,8 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> = TODO()
  */
 fun kingMoveNumber(start: Square, end: Square): Int {
     when {
-        (start.inside() && end.inside()) -> return Math.max(Math.abs(end.column - start.column),
-                Math.abs(end.row - start.row))
+        (start.inside() && end.inside()) -> return max(abs(end.column - start.column),
+                abs(end.row - start.row))
         else -> throw IllegalArgumentException()
     }
 }
