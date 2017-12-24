@@ -3,7 +3,7 @@
 package lesson3.task1
 
 import lesson4.task1.convertToString
-import java.lang.Math.pow
+import java.lang.Math.*
 
 fun sequenceDigit(n: Int, m: Int): Int {
     var numberN = n
@@ -33,7 +33,7 @@ fun factorial(n: Int): Double {
  */
 fun isPrime(n: Int): Boolean {
     if (n < 2) return false
-    for (m in 2..Math.sqrt(n.toDouble()).toInt()) {
+    for (m in 2..sqrt(n.toDouble()).toInt()) {
         if (n % m == 0) return false
     }
     return true
@@ -133,7 +133,8 @@ fun lcm(m: Int, n: Int): Int {//24: 6,8
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    val number = Math.sqrt(n.toDouble()).toInt()//теория чисел: переберать надо только числа, не превосходящие
+    val number = sqrt(n.toDouble()).toInt()//теория чисел: переберать надо только числа, не превосходящие
+    //val number = floor(sqrt(n.toDouble())).toInt()
     // корня из искомого. Среди всех пар, предполагаемая пара с максимальным наименьшим — это пара с
     // равными pi и qi, то есть pi * pi = M => pi =  sqrt(M)
     if (isPrime(n)) return n

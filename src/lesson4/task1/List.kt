@@ -3,7 +3,7 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import lesson3.task1.isPrime
-import java.lang.Math.pow
+import java.lang.Math.*
 
 /**
  * Пример
@@ -15,7 +15,7 @@ fun sqRoots(y: Double) =
             y < 0 -> listOf()
             y == 0.0 -> listOf(0.0)
             else -> {
-                val root = Math.sqrt(y)
+                val root = sqrt(y)
                 // Результат!
                 listOf(-root, root)
             }
@@ -35,8 +35,8 @@ fun biRoots(a: Double, b: Double, c: Double): List<Double> {
     val d = discriminant(a, b, c)
     if (d < 0.0) return listOf()
     if (d == 0.0) return sqRoots(-b / (2 * a))
-    val y1 = (-b + Math.sqrt(d)) / (2 * a)
-    val y2 = (-b - Math.sqrt(d)) / (2 * a)
+    val y1 = (-b + sqrt(d)) / (2 * a)
+    val y2 = (-b - sqrt(d)) / (2 * a)
     return sqRoots(y1) + sqRoots(y2)
 }
 
@@ -185,9 +185,9 @@ fun factorize(n: Int): List<Int> {
     var naturalNumber = n //342
     var multiplier = 1
     if (isPrime(naturalNumber)) return list + naturalNumber
-    while (multiplier <= Math.sqrt(naturalNumber.toDouble()).toInt()) // 2<=342....2<=171....3<=171....3<=57....3<=19....19<=19
-    {
-        multiplier++
+    while (multiplier <= floor(sqrt(naturalNumber.toDouble()))) // 2<=342....2<=171....3<=171....3<=57....3<=19....19<=19
+        {
+            multiplier++
         if (isPrime(naturalNumber)) {
             list += naturalNumber
             break
