@@ -202,6 +202,7 @@ fun factorize(n: Int): List<Int> {
     return list.sorted()
 }
 
+
 /**
  * Сложная
  *

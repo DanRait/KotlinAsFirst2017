@@ -144,6 +144,7 @@ fun minDivisor(n: Int): Int {
     return n
 }
 
+
 /**
  * Простая
  *
