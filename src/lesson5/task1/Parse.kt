@@ -245,7 +245,7 @@ fun plusMinus(expression: String): Int {
     var negativeSum = 0
     var positiveSum = 0
     val correct = expression.matches(Regex("""(?:\d+\s[-+]\s)+\d+|\d+"""))
-    if (correct) try {
+    if (correct) {
         val res1 = Regex("\\-\\s\\d+\\s*").replace(expression, "") // positive 2 + 31 + 13
         val res2 = Regex("\\+\\s\\d+").replace(expression, "")  // negative 2 - 40
         val res3 = Regex("^\\d+\\s*").replace(res2 + " ", "")  // negative - 40
@@ -260,8 +260,8 @@ fun plusMinus(expression: String): Int {
             negativeSum += matchedText2.value.toInt() // 40
         }
         commonSum = positiveSum - negativeSum // 46 - 40 = 6
-    } catch (e: IllegalArgumentException) {
-        throw IllegalArgumentException("Bad expression")
+    } else { throw IllegalArgumentException("Bad expression")
+        return -2
     }
     return commonSum
 }
