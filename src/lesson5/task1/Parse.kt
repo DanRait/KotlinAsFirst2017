@@ -73,6 +73,9 @@ fun dateStrToDigit(str: String): String {
     if (parts.size != 3) {
         return ""
     }
+    val correctFormat = Regex("""\d+\s[а-я]+\s\d+""").replace(str + " ", " ")
+    if (Regex("[^\\s]").containsMatchIn(correctFormat)) return ""
+
     var day = parts[0].toInt()
     var month = parts[1]
     var year = parts[2].toInt()
