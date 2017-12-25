@@ -1,6 +1,7 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson6.task2
 
+import lesson5.task1.computeDeviceCells
 import java.lang.Math
 import java.lang.Math.abs
 import java.lang.Math.max
@@ -26,9 +27,13 @@ data class Square(val column: Int, val row: Int) {
      * Для клетки не в пределах доски вернуть пустую строку
      */
     fun notation(): String {
-        if (!inside()) return ""
-        val cell = ((column + 'a'.toInt() - 1).toChar()).toString() + "${row}"
-        return cell
+        val mapOfPairs = mapOf(1 to "a", 2 to "b", 3 to "c", 4 to "d", 5 to "e",
+                6 to "f", 7 to "g", 8 to "h")
+        if (inside() && column in mapOfPairs.keys) {
+            val cell = mapOfPairs.get(column)!! + "${row}"
+            return cell
+        }
+        return ""
     }
 }
 
@@ -113,8 +118,8 @@ fun rookTrajectory(start: Square, end: Square): List<Square> = TODO()
  * Слон может пройти через клетку (6, 4) к клетке (3, 7).
  */
 fun bishopMoveNumber(start: Square, end: Square): Int {
-    if (start == end) return 0
     if (!start.inside() || !end.inside()) throw IllegalArgumentException()
+    if (start == end) return 0
     if (abs(start.column - end.column) == abs(start.row - end.row)) return 1
     if ((start.column + start.row) % 2 != (end.column + end.row) % 2) return -1
     return 2

@@ -111,12 +111,12 @@ fun diameter(vararg points: Point): Segment {
     if (points.size < 2) {
         throw IllegalArgumentException()
     }
-    for (a in points) {
-        for (b in points.filter { it != a }) {
-            if (a.distance(b) > maxSeg) {
-                maxSeg = a.distance(b)
-                pointA = a
-                pointB = b
+    for (i in 0..points.size - 2) {
+        for (j in i + 1..points.size - 1) {
+            if (points[i].distance(points[j]) > maxSeg) {
+                maxSeg = points[i].distance(points[j])
+                pointA = points[i]
+                pointB = points[j]
             }
         }
     }
